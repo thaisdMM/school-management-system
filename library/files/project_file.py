@@ -1,9 +1,33 @@
+from library.files import path
 import os
 import json
 
 
 def verificar_arquivo_existe(file_path):
     return os.path.exists(file_path)  # retorna True or False
+
+
+def verificar_pasta_existe():
+    folder_path = "files_created"
+    absolute_path = path.absolute_path(folder_path)
+    return os.path.isdir(absolute_path)
+
+
+def criar_pasta():
+    folder_path = "files_created"
+    absolute_path = path.absolute_path(folder_path)
+    try:
+        if not verificar_pasta_existe():
+            os.makedirs(absolute_path, exist_ok=True)
+            return True
+        else:
+            return True
+    except OSError:
+        print("Houve problema(OSError) e a a pasta não pode ser criada.")
+        return False
+    except:
+        print("Houve uma exceção geral e a a pasta não pode ser criada.")
+        return False
 
 
 # def criar_arquivo(file_path):
@@ -18,6 +42,7 @@ def verificar_arquivo_existe(file_path):
 
 
 def criar_subscrever_arquivo(file_paht, data=None):
+
     if data is None:
         data = []
     try:
