@@ -3,6 +3,10 @@ import os
 import json
 
 
+def folder_name():
+    return "files_created"
+
+
 def verificar_arquivo_existe(file_path):
     return os.path.exists(file_path)  # retorna True or False
 
