@@ -1,4 +1,5 @@
 from library.files import project_file
+from library.students import students_functions
 import os
 
 
@@ -29,3 +30,9 @@ def absolute_file_path(file_name):
     folder_path = absolute_folder_path()
     file_path = os.path.join(folder_path, file_name)
     return file_path
+
+
+def students_absolute_path():
+    file_name = students_functions.students_file_name()
+    student_path = absolute_file_path(file_name)
+    return student_path
