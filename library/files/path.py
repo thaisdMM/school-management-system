@@ -1,3 +1,4 @@
+from library.files import project_file
 import os
 
 
@@ -19,6 +20,12 @@ def absolute_path(file_path):
 
 
 def absolute_folder_path():
-    folder_name = "files_created"
+    folder_name = project_file.folder_name()
     folder_absolute_path = absolute_path(folder_name)
     return folder_absolute_path
+
+
+def absolute_file_path(file_name):
+    folder_path = absolute_folder_path()
+    file_path = os.path.join(folder_path, file_name)
+    return file_path
