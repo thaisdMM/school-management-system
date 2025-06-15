@@ -10,30 +10,49 @@ def students_file_name():
     return "cadastro_alunos.json"
 
 
-## fazer uma função para coletar dados de alunos em um arquivo
 def coleta_dados_alunos():
-    file_name = students_file_name()
-    file_path = path.absolute_file_path(file_name)
+    file_path = path.students_absolute_path()
     if not project_file.verificar_arquivo_existe(file_path):
         project_file.criar_subscrever_arquivo(file_path)
     dados_aluno = project_file.ler_arquivo(file_path)
     return dados_aluno
 
 
-## fazer outra funçao para apenas cadastrar alunos - chama a coleta, depois cadastra os demais no looping
-def cadastro_alunos(nome_aluno, matricula_aluno, file_path):
-    file_path = "cadastro_alunos_matricula.json"
+def cadastro_alunos(nome_aluno, matricula_aluno):
+    file_path = path.students_absolute_path()
 
-    if not project_file.verificar_arquivo_existe(file_path):
-        project_file.criar_arquivo(file_path)
-    else:
-        dados_aluno = project_file.ler_arquivo(file_path)
+    # if not project_file.verificar_arquivo_existe(file_path):
+    #     project_file.criar_arquivo(file_path)
+    # else:
+    # dados_aluno = project_file.ler_arquivo(file_path)
+    dados_aluno = coleta_dados_alunos()
     # looping de cadastro
-    project_interfaces.continuar()
-    lista_alunos = []
-    if dados_aluno:
-        lista_alunos.append(dados_aluno[:])
-    # verificar se a matricula existe:
+    while True:
+        decisao = project_interfaces.continuar()
+        if not decisao:
+            break
+        else:
+            # aqui tem que receber os dados e fazer um for
+            # fazer uma função para verificar a questão da matricula - pegar a verificação do codigo principal com any()
+
+# while True:
+#             matricula_aluno = int(input(f"Matrícula do aluno {nome_aluno}: "))
+#             # fazer uma validação se não for número.
+#             if any(
+#                 matricula_existente["matricula"] == matricula_aluno
+#                 for matricula_existente in lista_alunos
+#             ):
+#                 print(
+#                     f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Por favor, digite outro número de matrícula."
+#                 )
+        
+
+
+            # todo aluno que for cadastra nesse looping tem que chamar a função da matricula e depois fazer um apend na  lista de dado_aluno
+            lista_alunos = []
+            if dados_aluno:
+                lista_alunos.append(dados_aluno[:])
+            # verificar se a matricula existe:
 
     # se matricula não existe:
     aluno = {"nome": nome_aluno, "matricula": matricula_aluno, "disciplina": []}
@@ -42,6 +61,8 @@ def cadastro_alunos(nome_aluno, matricula_aluno, file_path):
     # quando o loopoing finalizar - salvar os dados no arquivo:
     project_file.subscrever_arquivo(file_path, lista_alunos)
     return aluno
+
+    # criar outra função para essa associaçao?
     # associacao_disciplinas_alunos(lista_alunos, lista_disciplinas)
     # print(
     #     f"{nome_aluno}: foi cadastrado(a) com sucesso com a matrícula {matricula_aluno}!"
