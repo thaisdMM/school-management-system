@@ -8,45 +8,33 @@ def verificar_arquivo_existe(file_path):
 
 
 def verificar_pasta_existe():
-    folder_path = "files_created"
-    absolute_path = path.absolute_path(folder_path)
-    return os.path.isdir(absolute_path)
+    folder_path = path.absolute_folder_path()
+    return os.path.isdir(folder_path)  # retorna True or False
 
 
 def criar_pasta():
-    folder_path = "files_created"
-    absolute_path = path.absolute_path(folder_path)
+    folder_path = path.absolute_folder_path()
     try:
         if not verificar_pasta_existe():
-            os.makedirs(absolute_path, exist_ok=True)
-            return True
+            os.makedirs(folder_path, exist_ok=True)
+            return True  # a pasta foi criada
         else:
-            return True
+            return True  # a pasta já existe
     except OSError:
         print("Houve problema(OSError) e a a pasta não pode ser criada.")
         return False
-    except:
+    except Exception:
         print("Houve uma exceção geral e a a pasta não pode ser criada.")
         return False
 
 
-# def criar_arquivo(file_path):
-#     data = []
-#     try:
-#         with open(file_path, "x") as file:
-#             pass
-#     except FileExistsError:
-#         print(f"O arquivo já existe")
-#     except PermissionError:
-#         print(f"Você não tem permissão para criar esse arquivo.")
-
-
-def criar_subscrever_arquivo(file_paht, data=None):
-
+def criar_subscrever_arquivo(file_path, data=None):
     if data is None:
         data = []
+    if not verificar_pasta_existe():
+        criar_pasta()
     try:
-        with open(file_paht, "w") as file:
+        with open(file_path, "w") as file:
             json.dump(data, file, indent=4)
             return True
     except FileNotFoundError:
@@ -54,6 +42,9 @@ def criar_subscrever_arquivo(file_paht, data=None):
         return False
     except PermissionError:
         print("Você não tem permissão para criar esse arquivo.")
+        return False
+    except Exception:
+        print("ERRO GERAL na criação/subscrição do arquivo.")
         return False
 
 
@@ -64,6 +55,9 @@ def append_arquivo(file_path, data):
             return True
     except PermissionError:
         print("Você não tem permissão para criar esse arquivo.")
+        return False
+    except Exception:
+        print("ERRO GERAL no append do arquivo.")
         return False
 
 
@@ -78,13 +72,6 @@ def ler_arquivo(file_path):
     except PermissionError:
         print("Você não tem permissão para criar esse arquivo.")
         return None
-
-
-# def verificar_arquivo_existe(file_path):
-#     try:
-#         with open(file_path, 'x') as file:
-#             print(f"O arquivo foi criado em {file_path}")
-#     except FileExistsError:
-#         print(f"O arquivo já existe.")
-#     except PermissionError:
-#         print(f"Você não tem acesso para criar esse arquivo.")
+    except Exception:
+        print("ERRO GERAL na leitura do arquivo.")
+        return None
