@@ -6,11 +6,14 @@ import json
 import os
 
 
+def students_file_name():
+    return "cadastro_alunos.json"
+
+
 ## fazer uma função para coletar dados de alunos em um arquivo
 def coleta_dados_alunos():
-    file_name = "files_created/cadastro_alunos.json"
-    file_path = path.absolute_path(file_name)
-
+    file_name = students_file_name()
+    file_path = path.absolute_file_path(file_name)
     if not project_file.verificar_arquivo_existe(file_path):
         project_file.criar_subscrever_arquivo(file_path)
     dados_aluno = project_file.ler_arquivo(file_path)
