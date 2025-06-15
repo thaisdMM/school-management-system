@@ -3,7 +3,11 @@ import os
 
 def absolute_path(file_path):
     # Caminho absoluto da pasta onde este arquivo está localizado
-    PASTA_BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # os.path.dirname usado mais de uma vez para chegar a raiz do projeto e o caminho absoluto ficar correto,
+    # > senão iria apontar para essa pasta, sendo que na verdade quero que os arquivos sejam salvos em outra pasta
+    PASTA_BASE = os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    )
     # Se file_path já for um caminho absoluto, retorna ele mesmo
     if os.path.isabs(file_path):
         return file_path
@@ -13,6 +17,8 @@ def absolute_path(file_path):
         CAMINHO_ARQUIVO = os.path.join(PASTA_BASE, file_path)
         return CAMINHO_ARQUIVO
 
-caminho2 = "files_create/cadastro_alunos_matricula.json"
 
-absolute_path(caminho2)
+def absolute_folder_path():
+    folder_name = "files_created"
+    folder_absolute_path = absolute_path(folder_name)
+    return folder_absolute_path
