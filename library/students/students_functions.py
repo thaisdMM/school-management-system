@@ -49,42 +49,35 @@ def cadastro_alunos():
     while (
         True
     ):  # tem que ter looping no main pq senao ele atualiza o menu toda iteração
-        try:
-            nome_aluno = input("Nome do aluno: ").strip().title()
-            # except NameError:
-            #     print("O nome não pode ser vazio!")
 
-            while True:
-                matricula_aluno = project_interfaces.leiaInt(
-                    f"Matrícula do aluno {nome_aluno} "
-                )
-                matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
-                if not matricula:
-                    aluno = {
-                        "nome": nome_aluno,
-                        "matricula": matricula_aluno,
-                        "disciplina": [],
-                    }
-                    break
-                print(
-                    f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Digite outra matrícula para o aluno {nome_aluno}"
-                )
-            dados_alunos.append(aluno.copy())
-            print(
-                f"Aluno: {aluno['nome']}, matricula: {aluno['matricula']} cadastrado com sucesso!"
+        nome_aluno = input("Nome do aluno: ").strip().title()
+        # except NameError:
+        #     print("O nome não pode ser vazio!")
+
+        while True:
+            matricula_aluno = project_interfaces.leiaInt(
+                f"Matrícula do aluno {nome_aluno} "
             )
-            decisao = project_interfaces.continuar()
-            # quando o loopoing finalizar - salvar os dados no arquivo:
-            if not decisao:
-                project_file.criar_subscrever_arquivo(file_path, dados_alunos)
+            matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
+            if not matricula:
+                aluno = {
+                    "nome": nome_aluno,
+                    "matricula": matricula_aluno,
+                    "disciplina": [],
+                }
                 break
-
-        # na função continuar eu já trato o erro abaixo, será que vai entrar aqui, acredito que não
-        # não funciona bem, pq quando entra no looping já é trata nele e aqui se eu não digitar nada ela aparece a mesg e depois pede nome do aluno
-        except KeyboardInterrupt:
             print(
-                "Parece que deseja sair do cadastro de alunos. Por favor, ao responder se deseja continuar, digite N para não continuar a cadastrar alunos e salvar seus dados cadastrados com segurança."
+                f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Digite outra matrícula para o aluno {nome_aluno}"
             )
+        dados_alunos.append(aluno.copy())
+        print(
+            f"Aluno: {aluno['nome']}, matricula: {aluno['matricula']} cadastrado com sucesso!"
+        )
+        decisao = project_interfaces.continuar()
+        # quando o loopoing finalizar - salvar os dados no arquivo:
+        if not decisao:
+            project_file.criar_subscrever_arquivo(file_path, dados_alunos)
+            break
 
     # criar outra função para essa associaçao?
     # associacao_disciplinas_alunos(lista_alunos, lista_disciplinas)
