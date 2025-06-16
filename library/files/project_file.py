@@ -38,7 +38,7 @@ def criar_subscrever_arquivo(file_path, data=None):
     if not verificar_pasta_existe():
         criar_pasta()
     try:
-        with open(file_path, "w") as file:
+        with open(file_path, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)
             return True
     except FileNotFoundError:
