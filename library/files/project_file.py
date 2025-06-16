@@ -39,7 +39,7 @@ def criar_subscrever_arquivo(file_path, data=None):
         criar_pasta()
     try:
         with open(file_path, "w", encoding="utf-8") as file:
-            json.dump(data, file, indent=4)
+            json.dump(data, file, indent=4, ensure_ascii=False)
             return True
     except FileNotFoundError:
         print("Arquivo não encontrado")
@@ -54,8 +54,8 @@ def criar_subscrever_arquivo(file_path, data=None):
 
 def append_arquivo(file_path, data):
     try:
-        with open(file_path, "a") as append_file:
-            json.dump(data, append_file, indent=4)
+        with open(file_path, "a", encoding="utf-8") as append_file:
+            json.dump(data, append_file, indent=4, ensure_ascii=False)
             return True
     except PermissionError:
         print("Você não tem permissão para criar esse arquivo.")
@@ -67,7 +67,7 @@ def append_arquivo(file_path, data):
 
 def ler_arquivo(file_path):
     try:
-        with open(file_path, "r") as read_file:
+        with open(file_path, "r", encoding="utf-8") as read_file:
             content = json.load(read_file)
             return content
     except FileNotFoundError:
