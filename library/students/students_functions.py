@@ -22,9 +22,8 @@ def coleta_dados_alunos():
 def verifica_matricula_existente(matricula: int) -> bool:
     # fazer uma validação se não for número. usar a função leiaInt no codigo principal
     dados_alunos = coleta_dados_alunos()
-    if len(dados_alunos) == 0:
-        return False
-    elif any(
+    # any() com lista vazia: seguro, retorna False, não quebra o código - nao precisa tratar esse caso
+    if any(
         matricula_existente["matricula"] == matricula
         for matricula_existente in dados_alunos
     ):
