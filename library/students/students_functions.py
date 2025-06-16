@@ -11,8 +11,6 @@ def students_file_name():
 
 
 # será que preciso passar um parâmetro nessa função? acho que não, pq quando eu chamar ela no main o usuario teria que passar algo que já está definido
-
-
 def coleta_dados_alunos():
     file_path = path.students_absolute_path()
     if not project_file.verificar_arquivo_existe(file_path):
@@ -21,13 +19,13 @@ def coleta_dados_alunos():
     return dados_alunos
 
 
-# vai ter que receber o parametro dos dados para ela atualizar na verificaççao da matricula, senão ela não vai funcionar pois cadastar matricula tem looping, ela não salvou nada, ai vai permir matricula igual,
-def verifica_matricula_existente(matricula: int, lista_alunos) -> bool:
+def verifica_matricula_existente(matricula: int) -> bool:
     # fazer uma validação se não for número. usar a função leiaInt no codigo principal
+    dados_alunos = coleta_dados_alunos()
     # any() com lista vazia: seguro, retorna False, não quebra o código - nao precisa tratar esse caso
     if any(
         matricula_existente["matricula"] == matricula
-        for matricula_existente in lista_alunos
+        for matricula_existente in dados_alunos
     ):
         return True
     return False
@@ -40,33 +38,40 @@ def buscar_aluno(lista_alunos, matricula):
     return None
 
 
-def cadastro_alunos(nome_aluno, matricula_aluno, lista_alunos):
-    file_path = path.students_absolute_path()
-    #dados_alunos = coleta_dados_alunos()
-    # looping de cadastro
-    # while True:
-    # tem que ter looping no main pq senao ele atualiza o menu toda iteração
-    # decisao = project_interfaces.continuar()
-    # quando o loopoing finalizar - salvar os dados no arquivo:
-    # if not decisao:
-    #     project_file.criar_subscrever_arquivo(file_path, dados_alunos)
-    #     break
-    # else:
-    # matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
-    # if not matricula:
-    #     aluno = {
-    #         "nome": nome_aluno,
-    #         "matricula": matricula_aluno,
-    #         "disciplina": [],
-    #     }
-    #     dados_alunos.append(aluno.copy())
-    #     # return aluno # verificar se esse retorno não atrapalha o looping
+def cadastro_alunos(nome_aluno, matricula_aluno):
+    file_path = (
+        path.students_absolute_path()
+    )  # acho que não preciso, já pega os dados no coleta de dados
 
+    # if not project_file.verificar_arquivo_existe(file_path):
+    #     project_file.criar_arquivo(file_path)
     # else:
-    #     return "matricula invalida"
-    project_file.criar_subscrever_arquivo(file_path, lista_alunos)
-    #     # pedir uma nova matricula
-    #     return None
+    # dados_aluno = project_file.ler_arquivo(file_path)
+    dados_aluno = coleta_dados_alunos()
+    # looping de cadastro
+    while True:
+        decisao = project_interfaces.continuar()
+        if not decisao:
+            break
+        else:
+            # aqui tem que receber os dados e fazer um for
+            # fazer uma função para verificar a questão da matricula - pegar a verificação do codigo principal com any()
+
+            # while True:
+
+            # todo aluno que for cadastra nesse looping tem que chamar a função da matricula e depois fazer um apend na  lista de dado_aluno
+            lista_alunos = []
+            if dados_aluno:
+                lista_alunos.append(dados_aluno[:])
+            # verificar se a matricula existe:
+
+    # se matricula não existe:
+    aluno = {"nome": nome_aluno, "matricula": matricula_aluno, "disciplina": []}
+    lista_alunos.append(aluno.copy())
+
+    # quando o loopoing finalizar - salvar os dados no arquivo:
+    project_file.subscrever_arquivo(file_path, lista_alunos)
+    return aluno
 
     # criar outra função para essa associaçao?
     # associacao_disciplinas_alunos(lista_alunos, lista_disciplinas)
