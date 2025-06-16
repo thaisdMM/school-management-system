@@ -19,13 +19,17 @@ def coleta_dados_alunos():
     return dados_alunos
 
 
-def verifica_matricula_existente(matricula: int) -> bool:
+def verifica_matricula_existente(matricula: int, lista_alunos) -> bool:
+
     # fazer uma validação se não for número. usar a função leiaInt no codigo principal
-    dados_alunos = coleta_dados_alunos()
+    # dados_alunos = coleta_dados_alunos()
+
+    # será que coloca um while true nessa função, para só parar quando for false any
+
     # any() com lista vazia: seguro, retorna False, não quebra o código - nao precisa tratar esse caso
     if any(
         matricula_existente["matricula"] == matricula
-        for matricula_existente in dados_alunos
+        for matricula_existente in lista_alunos
     ):
         return True
     return False
@@ -38,40 +42,49 @@ def buscar_aluno(lista_alunos, matricula):
     return None
 
 
-def cadastro_alunos(nome_aluno, matricula_aluno):
-    file_path = (
-        path.students_absolute_path()
-    )  # acho que não preciso, já pega os dados no coleta de dados
-
-    # if not project_file.verificar_arquivo_existe(file_path):
-    #     project_file.criar_arquivo(file_path)
-    # else:
-    # dados_aluno = project_file.ler_arquivo(file_path)
-    dados_aluno = coleta_dados_alunos()
+def cadastro_alunos():
+    file_path = path.students_absolute_path()
+    dados_alunos = coleta_dados_alunos()
     # looping de cadastro
-    while True:
-        decisao = project_interfaces.continuar()
-        if not decisao:
-            break
-        else:
-            # aqui tem que receber os dados e fazer um for
-            # fazer uma função para verificar a questão da matricula - pegar a verificação do codigo principal com any()
+    while (
+        True
+    ):  # tem que ter looping no main pq senao ele atualiza o menu toda iteração
+        try:
+            nome_aluno = input("Nome do aluno: ").strip().title()
+            # except NameError:
+            #     print("O nome não pode ser vazio!")
 
-            # while True:
+            while True:
+                matricula_aluno = project_interfaces.leiaInt(
+                    f"Matrícula do aluno {nome_aluno} "
+                )
+                matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
+                if not matricula:
+                    aluno = {
+                        "nome": nome_aluno,
+                        "matricula": matricula_aluno,
+                        "disciplina": [],
+                    }
+                    break
+                print(
+                    f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Digite outra matrícula para o aluno {nome_aluno}"
+                )
+            dados_alunos.append(aluno.copy())
+            print(
+                f"Aluno: {aluno['nome']}, matricula: {aluno['matricula']} cadastrado com sucesso!"
+            )
+            decisao = project_interfaces.continuar()
+            # quando o loopoing finalizar - salvar os dados no arquivo:
+            if not decisao:
+                project_file.criar_subscrever_arquivo(file_path, dados_alunos)
+                break
 
-            # todo aluno que for cadastra nesse looping tem que chamar a função da matricula e depois fazer um apend na  lista de dado_aluno
-            lista_alunos = []
-            if dados_aluno:
-                lista_alunos.append(dados_aluno[:])
-            # verificar se a matricula existe:
-
-    # se matricula não existe:
-    aluno = {"nome": nome_aluno, "matricula": matricula_aluno, "disciplina": []}
-    lista_alunos.append(aluno.copy())
-
-    # quando o loopoing finalizar - salvar os dados no arquivo:
-    project_file.subscrever_arquivo(file_path, lista_alunos)
-    return aluno
+        # na função continuar eu já trato o erro abaixo, será que vai entrar aqui, acredito que não
+        # não funciona bem, pq quando entra no looping já é trata nele e aqui se eu não digitar nada ela aparece a mesg e depois pede nome do aluno
+        except KeyboardInterrupt:
+            print(
+                "Parece que deseja sair do cadastro de alunos. Por favor, ao responder se deseja continuar, digite N para não continuar a cadastrar alunos e salvar seus dados cadastrados com segurança."
+            )
 
     # criar outra função para essa associaçao?
     # associacao_disciplinas_alunos(lista_alunos, lista_disciplinas)
