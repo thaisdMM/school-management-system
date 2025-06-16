@@ -33,18 +33,36 @@ while True:
 
         # if not project_file.verificar_arquivo_existe(file_path):
         #     project_file.criar_arquivo(file_path)
+        alunos = students_functions.coleta_dados_alunos()
         while True:
             nome_aluno = input("Nome do aluno: ").strip().title()
-            # while True:
-            matricula_aluno = project_interfaces.leiaInt(
-                f"Matrícula do aluno {nome_aluno}: "
-            )
+            while True:
+                matricula_aluno = project_interfaces.leiaInt(
+                    f"Matrícula do aluno {nome_aluno}: "
+                )
+                matricula = students_functions.verifica_matricula_existente(
+                    matricula_aluno, alunos
+                )
+                if not matricula:
+                    aluno = {
+                        "nome": nome_aluno,
+                        "matricula": matricula_aluno,
+                        "disciplina": [],
+                    }
+                    alunos.append(aluno.copy())
+                    break
+                    # return aluno # verificar se esse retorno não atrapalha o looping
 
+                else:
+                    print(
+                        f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Por favor, digite outro número de matrícula."
+                    )
+            print(alunos)
             resposta = project_interfaces.continuar()
             if not resposta:
+                students_functions.cadastro_alunos(nome_aluno, matricula_aluno, alunos)
                 break
-            else:
-                students_functions.cadastro_alunos(nome_aluno, matricula_aluno)
+
                 # print(resposta)
     #             verifica_matricula = students_functions.verifica_matricula_existente(matricula_aluno)
     #             if verifica_matricula:
