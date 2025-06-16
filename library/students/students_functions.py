@@ -10,16 +10,39 @@ def students_file_name():
     return "cadastro_alunos.json"
 
 
+# será que preciso passar um parâmetro nessa função? acho que não, pq quando eu chamar ela no main o usuario teria que passar algo que já está definido
 def coleta_dados_alunos():
     file_path = path.students_absolute_path()
     if not project_file.verificar_arquivo_existe(file_path):
         project_file.criar_subscrever_arquivo(file_path)
-    dados_aluno = project_file.ler_arquivo(file_path)
-    return dados_aluno
+    dados_alunos = project_file.ler_arquivo(file_path)
+    return dados_alunos
+
+
+def verifica_matricula_existente(matricula: int) -> bool:
+    # fazer uma validação se não for número. usar a função leiaInt no codigo principal
+    dados_alunos = coleta_dados_alunos()
+    if len(dados_alunos) == 0:
+        return False
+    elif any(
+        matricula_existente["matricula"] == matricula
+        for matricula_existente in dados_alunos
+    ):
+        return True
+    return False
+
+
+def buscar_aluno(lista_alunos, matricula):
+    for aluno in lista_alunos:
+        if aluno["matricula"] == matricula:
+            return aluno
+    return None
 
 
 def cadastro_alunos(nome_aluno, matricula_aluno):
-    file_path = path.students_absolute_path()
+    file_path = (
+        path.students_absolute_path()
+    )  # acho que não preciso, já pega os dados no coleta de dados
 
     # if not project_file.verificar_arquivo_existe(file_path):
     #     project_file.criar_arquivo(file_path)
@@ -35,18 +58,7 @@ def cadastro_alunos(nome_aluno, matricula_aluno):
             # aqui tem que receber os dados e fazer um for
             # fazer uma função para verificar a questão da matricula - pegar a verificação do codigo principal com any()
 
-# while True:
-#             matricula_aluno = int(input(f"Matrícula do aluno {nome_aluno}: "))
-#             # fazer uma validação se não for número.
-#             if any(
-#                 matricula_existente["matricula"] == matricula_aluno
-#                 for matricula_existente in lista_alunos
-#             ):
-#                 print(
-#                     f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Por favor, digite outro número de matrícula."
-#                 )
-        
-
+            # while True:
 
             # todo aluno que for cadastra nesse looping tem que chamar a função da matricula e depois fazer um apend na  lista de dado_aluno
             lista_alunos = []
@@ -81,13 +93,6 @@ def mostrar_alunos(lista_alunos):
             print()
             print("-" * 60)
     print("=-" * 50)
-
-
-def buscar_aluno(lista_alunos, matricula):
-    for aluno in lista_alunos:
-        if aluno["matricula"] == matricula:
-            return aluno
-    return None
 
 
 def exibir_dados_alunos(lista_alunos, matricula):
