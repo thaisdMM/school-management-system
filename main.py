@@ -23,69 +23,10 @@ while True:
             "Fim do programa.",
         ]
     )
-    # queria ver se é possivel usar o tamanho da lista depois para definir o fim da resposta
+
     if resposta == 1:
-        # cadastro_alunos(nome_aluno, matricula_aluno):
-        # arquivo = "cadastro_alunos_matricula.json"
-        # print(students_functions.coleta_dados_alunos(arquivo))
         project_interfaces.titulo(f"{resposta}- Cadastrar alunos.")
-        # file_path = "cadastro_alunos_matricula.json"
-
-        # if not project_file.verificar_arquivo_existe(file_path):
-        #     project_file.criar_arquivo(file_path)
-        alunos = students_functions.coleta_dados_alunos()
-        while True:
-            nome_aluno = input("Nome do aluno: ").strip().title()
-            while True:
-                matricula_aluno = project_interfaces.leiaInt(
-                    f"Matrícula do aluno {nome_aluno}: "
-                )
-                matricula = students_functions.verifica_matricula_existente(
-                    matricula_aluno, alunos
-                )
-                if not matricula:
-                    aluno = {
-                        "nome": nome_aluno,
-                        "matricula": matricula_aluno,
-                        "disciplina": [],
-                    }
-                    alunos.append(aluno.copy())
-                    break
-                    # return aluno # verificar se esse retorno não atrapalha o looping
-
-                else:
-                    print(
-                        f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Por favor, digite outro número de matrícula."
-                    )
-            print(alunos)
-            resposta = project_interfaces.continuar()
-            if not resposta:
-                students_functions.cadastro_alunos(nome_aluno, matricula_aluno, alunos)
-                break
-
-                # print(resposta)
-    #             verifica_matricula = students_functions.verifica_matricula_existente(matricula_aluno)
-    #             if verifica_matricula:
-    #                 print(
-    #                     f"Matrícula {matricula_aluno} já cadastrada em outro aluno. Por favor, digite outro número de matrícula."
-    #                 )
-    #                 print(project_interfaces.linha())
-    #             else:
-    #                 break
-    #         print(project_interfaces.linha())
-    #         aluno = students_functions.cadastro_alunos(nome_aluno, matricula_aluno)
-    #         if aluno:
-    #             #print(f"Aluno cadastrado com sucesso")
-    #             print(f"Aluno= {aluno['nome']} matrícula= {aluno['matricula']} cadastrado com sucesso!")
-    # #             print(f"Aluno= {aluno['nome']} matrícula= {aluno['matricula']} cadastrado com sucesso!")
-    #                     ~~~~~^^^^^^^^
-    # TypeError: 'bool' object is not subscriptable
-
-    # project_file.append_arquivo(file_path, aluno)
-    # print(f"Aluno cadastrado com sucesso")
-    # # dados = students_functions.cadastro_alunos(nome_aluno, matricula_aluno)
-    # project_file.subscrever_arquivo(file_path, dados)
-    # print(f"Arquivo de alunos criado com sucesso em {file_path}")
+        students_functions.cadastro_alunos()
 
     elif resposta == 2:
         project_interfaces.titulo(f"{resposta}- Exibir alunos cadastrados:")
