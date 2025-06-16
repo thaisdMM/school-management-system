@@ -40,9 +40,9 @@ def buscar_aluno(lista_alunos, matricula):
     return None
 
 
-def cadastro_alunos(nome_aluno, matricula_aluno):
+def cadastro_alunos(nome_aluno, matricula_aluno, lista_alunos):
     file_path = path.students_absolute_path()
-    dados_alunos = coleta_dados_alunos()
+    #dados_alunos = coleta_dados_alunos()
     # looping de cadastro
     # while True:
     # tem que ter looping no main pq senao ele atualiza o menu toda iteração
@@ -52,19 +52,19 @@ def cadastro_alunos(nome_aluno, matricula_aluno):
     #     project_file.criar_subscrever_arquivo(file_path, dados_alunos)
     #     break
     # else:
-    matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
-    if not matricula:
-        aluno = {
-            "nome": nome_aluno,
-            "matricula": matricula_aluno,
-            "disciplina": [],
-        }
-        dados_alunos.append(aluno.copy())
-        # return aluno # verificar se esse retorno não atrapalha o looping
+    # matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
+    # if not matricula:
+    #     aluno = {
+    #         "nome": nome_aluno,
+    #         "matricula": matricula_aluno,
+    #         "disciplina": [],
+    #     }
+    #     dados_alunos.append(aluno.copy())
+    #     # return aluno # verificar se esse retorno não atrapalha o looping
 
-    else:
-        return "matricula invalida"
-    project_file.criar_subscrever_arquivo(file_path, dados_alunos)
+    # else:
+    #     return "matricula invalida"
+    project_file.criar_subscrever_arquivo(file_path, lista_alunos)
     #     # pedir uma nova matricula
     #     return None
 
