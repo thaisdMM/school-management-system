@@ -10,7 +10,6 @@ def students_file_name():
     return "cadastro_alunos.json"
 
 
-# será que preciso passar um parâmetro nessa função? acho que não, pq quando eu chamar ela no main o usuario teria que passar algo que já está definido
 def coleta_dados_alunos():
     file_path = path.students_absolute_path()
     if not project_file.verificar_arquivo_existe(file_path):
@@ -20,12 +19,6 @@ def coleta_dados_alunos():
 
 
 def verifica_matricula_existente(matricula: int, lista_alunos) -> bool:
-
-    # fazer uma validação se não for número. usar a função leia_int no codigo principal
-    # dados_alunos = coleta_dados_alunos()
-
-    # será que coloca um while true nessa função, para só parar quando for false any
-
     # any() com lista vazia: seguro, retorna False, não quebra o código - nao precisa tratar esse caso
     if any(
         matricula_existente["matricula"] == matricula
@@ -45,18 +38,11 @@ def buscar_aluno(lista_alunos, matricula):
 def cadastro_alunos():
     file_path = path.students_absolute_path()
     dados_alunos = coleta_dados_alunos()
-    # looping de cadastro
-    while (
-        True
-    ):  # tem que ter looping no main pq senao ele atualiza o menu toda iteração
-
+    while True:
         nome_aluno = input("Nome do aluno: ").strip().title()
-        # except NameError:
-        #     print("O nome não pode ser vazio!")
-
         while True:
-            matricula_aluno = project_interfaces.leia_int(
-                f"Matrícula do aluno {nome_aluno} "
+            matricula_aluno = abs(
+                project_interfaces.leia_int(f"Matrícula do aluno {nome_aluno} ")
             )
             matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
             if not matricula:
@@ -73,6 +59,7 @@ def cadastro_alunos():
         print(
             f"Aluno: {aluno['nome']}, matricula: {aluno['matricula']} cadastrado com sucesso!"
         )
+        print("-" * 60)
         decisao = project_interfaces.continuar()
         # quando o loopoing finalizar - salvar os dados no arquivo:
         if not decisao:
@@ -87,17 +74,21 @@ def cadastro_alunos():
     # print("=-" * 50)
 
 
-def mostrar_alunos(lista_alunos):
-    print("LISTA DE ALUNOS:")
-    print()
-    if len(lista_alunos) <= 0:
-        print("Ainda não existem alunos cadastrados.")
+def mostrar_alunos():
+    file_path = path.students_absolute_path()
+    dados_arquivo = project_file.ler_arquivo(file_path)
+    if dados_arquivo is None:
+        print(
+            "Não foi possível carregar os dados dos alunos. O arquivo não existe ou contém dados inválidos."
+        )
+    elif len(dados_arquivo) <= 0:
+        print("Ainda não existem alunos cadastrados no arquivo de alunos.")
     else:
-        for aluno in lista_alunos:
-            print(f"{aluno['nome']:<5} = matrícula {aluno['matricula']}", end="")
+        print("LISTA DE ALUNOS:")
+        for aluno in dados_arquivo:
+            print(f"{aluno['nome']:<30}| matrícula: {aluno['matricula']:>10}", end="")
             print()
             print("-" * 60)
-    print("=-" * 50)
 
 
 def exibir_dados_alunos(lista_alunos, matricula):
