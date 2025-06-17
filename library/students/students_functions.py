@@ -21,7 +21,7 @@ def coleta_dados_alunos():
 
 def verifica_matricula_existente(matricula: int, lista_alunos) -> bool:
 
-    # fazer uma validação se não for número. usar a função leiaInt no codigo principal
+    # fazer uma validação se não for número. usar a função leia_int no codigo principal
     # dados_alunos = coleta_dados_alunos()
 
     # será que coloca um while true nessa função, para só parar quando for false any
@@ -55,7 +55,7 @@ def cadastro_alunos():
         #     print("O nome não pode ser vazio!")
 
         while True:
-            matricula_aluno = project_interfaces.leiaInt(
+            matricula_aluno = project_interfaces.leia_int(
                 f"Matrícula do aluno {nome_aluno} "
             )
             matricula = verifica_matricula_existente(matricula_aluno, dados_alunos)
