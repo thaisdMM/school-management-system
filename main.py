@@ -1,6 +1,7 @@
 from library.interface import project_interfaces
 from library.students import students_functions
 from library.files import project_file
+from library.subjects import subjects_functions
 from time import sleep
 import os
 import json
@@ -30,8 +31,10 @@ while True:
 
     elif resposta == 2:
         project_interfaces.titulo(f"{resposta}- Exibir alunos cadastrados:")
+        students_functions.mostrar_alunos()
     elif resposta == 3:
         project_interfaces.titulo(f"{resposta}- Cadastrar disciplinas.")
+        subjects_functions.cadastro_disciplinas()
     elif resposta == 4:
         project_interfaces.titulo(f"{resposta}- Exibir disciplinas cadastradas:")
     elif resposta == 5:
