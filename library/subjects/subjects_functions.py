@@ -1,12 +1,83 @@
-def cadastro_disciplinas(lista_disciplinas, nome_disciplina, codigo_disciplina):
-    disciplina = {"nome": nome_disciplina, "codigo": codigo_disciplina}
-    lista_disciplinas.append(disciplina.copy())
-    associacao_disciplinas_alunos(lista_alunos, [disciplina])
-    print(
-        f"Disciplina: {nome_disciplina} cadastrada com sucesso com o código {codigo_disciplina}"
-    )
-    print("=-" * 50)
-    return
+from library.files import path
+from library.files import project_file
+from library.interface import project_interfaces
+import os
+
+
+def subjects_file_name():
+    return "cadastro_disciplinas.json"
+
+
+def coleta_dados_disciplinas():
+    subjects_path = path.subjects_absolute_path()
+    if not project_file.verificar_arquivo_existe(subjects_path):
+        project_file.criar_subscrever_arquivo(subjects_path)
+    dados_disciplinas = project_file.ler_arquivo()
+    return dados_disciplinas
+
+
+def verificar_nome_disciplina_existe(nome_disciplina, lista_disciplinas):
+    if any(
+        disciplina_existente["nome"] == nome_disciplina
+        for disciplina_existente in lista_disciplinas
+    ):
+        return True
+    return False
+
+
+def verifica_codigo_disciplina_existe(codigo_disciplina, lista_discipinas):
+    if any(
+        codigo_existente["codigo"] == codigo_disciplina
+        for codigo_existente in lista_discipinas
+    ):
+        return True
+    return False
+
+
+def cadastro_disciplinas():
+    subjects_path = path.subjects_absolute_path()
+    dados_disciplinas = coleta_dados_disciplinas()
+    while True:
+        nome_disciplina = input("Nome da disciplina: ").strip().title()
+        # verificar se nome já existe com while
+        while True:
+            verifica_nome_disciplina = verificar_nome_disciplina_existe(
+                nome_disciplina, dados_disciplinas
+            )
+            if verifica_nome_disciplina:
+                print(
+                    f"A disciplina {nome_disciplina} já está cadastrada. Por favor digite outro nome de disciplina."
+                )
+            else:
+                disciplina = {"nome": nome_disciplina}
+                break
+        while True:
+            codigo_disciplina = abs(
+                project_interfaces.leia_int(f"Código da disciplina {nome_disciplina}: ")
+            )
+            verifica_disciplina = verifica_codigo_disciplina_existe(
+                codigo_disciplina, dados_disciplinas
+            )
+            if verifica_disciplina:
+                print(
+                    f"O código {codigo_disciplina} já está cadastrado em outra disciplina. Por favor digite outro codigo para {nome_disciplina}"
+                )
+            else:
+                disciplina["codigo"] = codigo_disciplina
+                break
+        dados_disciplinas.append(disciplina.copy())
+        print(
+            f"Disciplina: {nome_disciplina}, código: {codigo_disciplina}  cadastrada com sucesso!"
+        )
+        # associacao_disciplinas_alunos(lista_alunos, [disciplina])
+        resposta = project_interfaces.continuar()
+        if not resposta:
+            project_file.criar_subscrever_arquivo(subjects_path, dados_disciplinas)
+            print(f"Arquivo de disciplinas atualizado.")
+            break
+
+
+()
 
 
 def mostrar_disciplinas(lista_disciplinas):
