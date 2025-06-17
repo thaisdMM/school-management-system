@@ -1,16 +1,23 @@
-def leiaInt(msg):
+def leia_int(msg):
     while True:
         try:
             valor_digitado = input(msg)
             valor_convertido = int(valor_digitado)
         except (ValueError, TypeError):
             print(
-                f"\033[0;31mErro! '{valor_digitado}' Por favor digite um número inteiro válido!\033[m"
+                f"Erro! '{valor_digitado}' Por favor digite um número inteiro válido!"
             )
             continue
         except KeyboardInterrupt:
-            print(f"\33[0;31mUsuário preferiu não digitar esse número.\033[m")
-            return 0
+            print(
+                f"Erro! Entrada interrompida manualmente. Por favor, digite um número inteiro válido ou utilize a opção de saída do programa."
+            )
+            continue
+        except EOFError:
+            print(
+                f"Erro! Nenhuma entrada foi fornecida. Por favor, digite um número inteiro válido ou utilize a opção de saída do programa."
+            )
+            continue
         else:
             return valor_convertido
 
@@ -59,7 +66,7 @@ def continuar():
                 resposta = False
             if continuar == "S":
                 resposta = True
-        except (ValueError, TypeError, IndexError, KeyboardInterrupt):
+        except (IndexError, KeyboardInterrupt, EOFError):
             print("Resposta inválida. Responda S para continuar ou N para parar.")
             resposta = None
     return resposta
