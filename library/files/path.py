@@ -1,5 +1,6 @@
 from library.files import project_file
 from library.students import students_functions
+from library.subjects import subjects_functions
 import os
 
 
@@ -36,3 +37,9 @@ def students_absolute_path():
     file_name = students_functions.students_file_name()
     student_path = absolute_file_path(file_name)
     return student_path
+
+
+def subjects_absolute_path():
+    file_name = subjects_functions.subjects_file_name()
+    subjects_path = absolute_file_path(file_name)
+    return subjects_path
