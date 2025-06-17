@@ -42,7 +42,7 @@ def menu(lista):
         contador += 1
     print(linha())
     while True:
-        opcao = leiaInt(
+        opcao = leia_int(
             "\033[32mBem vindo ao programa. Em que podemos ajudar? Digite a opção: \033[m"
         )
         if opcao > 0 and opcao <= len(lista):
