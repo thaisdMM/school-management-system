@@ -84,7 +84,8 @@ def mostrar_disciplinas():
         print(
             "Não foi possível carregar os dados das disciplinas. O arquivo não existe ou contém dados inválidos."
         )
-    elif len(dados_disciplinas) <= 0:
+    # vale pra listas vazias
+    if not dados_disciplinas:
         print("Ainda não existem disciplinas cadastradas.")
     else:
         print("LISTA DE DISCIPLINAS:")
