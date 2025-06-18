@@ -93,6 +93,14 @@ def mostrar_alunos():
             print("-" * 60)
 
 
+# retorna True no primeiro momento que encontrar e encerra ou False se não encontrar
+def buscar_disciplina_do_aluno(codigo_disciplina: int, aluno: dict):
+    return any(
+        codigo_existente["codigo"] == codigo_disciplina["codigo"]
+        for codigo_existente in aluno["disciplina"]
+    )
+
+
 def exibir_dados_alunos(lista_alunos, matricula):
     aluno = buscar_aluno(lista_alunos, matricula)
     if aluno == None:
