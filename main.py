@@ -48,8 +48,8 @@ while True:
 
     elif resposta == 6:
         project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
-        
-        
+        subjects_functions.cadastro_notas_media_situacao_aluno()
+
     elif resposta == 7:
         project_interfaces.titulo(f"{resposta}- Exibir situação de todos os alunos.")
     elif resposta == 8:
