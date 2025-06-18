@@ -1,6 +1,7 @@
 from library.files import path
 from library.files import project_file
 from library.interface import project_interfaces
+from library.students import students_functions
 import os
 
 
@@ -97,27 +98,29 @@ def mostrar_disciplinas():
 
 def associacao_disciplinas_alunos():
     students_path = path.students_absolute_path()
-    subjects_path = path.subjects_absolute_path()
-    dados_alunos = project_file.ler_arquivo(students_path)
-    dados_disciplinas = project_file.ler_arquivo(subjects_path)
-    if dados_alunos is None:
-        dados_alunos = []
-    if dados_disciplinas is None:
-        dados_disciplinas = []
+    dados_alunos = students_functions.coleta_dados_alunos()
+    dados_disciplinas = coleta_dados_disciplinas()
     if not dados_alunos:
-        print("Ainda não existem alunos cadastrados. Para associar aluno à disciplinas é necessário cadastrar alunos.")
+        print(
+            "Ainda não existem alunos cadastrados. Para associar aluno à disciplinas é necessário cadastrar alunos."
+        )
     if not dados_disciplinas:
-        print("Ainda não existem disciplinas cadastradas. Para associar aluno à disciplinas é necessário cadastrar disciplinas.")
+        print(
+            "Ainda não existem disciplinas cadastradas. Para associar aluno à disciplinas é necessário cadastrar disciplinas."
+        )
     else:
+        modificou_dados = False
         for aluno in dados_alunos:
             for disciplina in dados_disciplinas:
-                if any(
-                    codigo_existente["codigo"] == disciplina["codigo"]
-                    for codigo_existente in aluno["disciplina"]
-                ):
+                existe_disciplina = students_functions.buscar_disciplina_do_aluno(
+                    disciplina, aluno
+                )
+                if existe_disciplina:
                     continue
                 else:
-                    print(f"Quer assossiar ao {aluno['nome']} a disciplina {disciplina['nome']}")
+                    print(
+                        f"Quer assossiar ao {aluno['nome']} a disciplina {disciplina['nome']}"
+                    )
                     resposta = project_interfaces.continuar()
                     if not resposta:
                         continue
@@ -131,8 +134,14 @@ def associacao_disciplinas_alunos():
                                 "situacao": "INDEFINIDA",
                             }
                         )
-        #print(dados_alunos)
-        project_file.criar_subscrever_arquivo(students_path, dados_alunos)
+                        modificou_dados = True
+        # print(dados_alunos)
+        if modificou_dados:
+            project_file.criar_subscrever_arquivo(students_path, dados_alunos)
+        else:
+            print(
+                "Nenhuma nova disciplina foi adicionada a nenhum aluno ou todos os alunos já possuem as diciplinas existentes cadastradas."
+            )
 
 
 def existem_notas_cadastradas(lista):
