@@ -32,11 +32,14 @@ while True:
     elif resposta == 2:
         project_interfaces.titulo(f"{resposta}- Exibir alunos cadastrados:")
         students_functions.mostrar_alunos()
+
     elif resposta == 3:
         project_interfaces.titulo(f"{resposta}- Cadastrar disciplinas.")
         subjects_functions.cadastro_disciplinas()
+
     elif resposta == 4:
         project_interfaces.titulo(f"{resposta}- Exibir disciplinas cadastradas:")
+        subjects_functions.mostrar_disciplinas()
     elif resposta == 5:
         project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
     elif resposta == 6:

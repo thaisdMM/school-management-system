@@ -77,17 +77,21 @@ def cadastro_disciplinas():
             break
 
 
-def mostrar_disciplinas(lista_disciplinas):
-    print("LISTA DE DISCIPLINAS:")
-    print()
-    if len(lista_disciplinas) <= 0:
+def mostrar_disciplinas():
+    subjects_path = path.subjects_absolute_path()
+    dados_disciplinas = project_file.ler_arquivo(subjects_path)
+    if dados_disciplinas is None:
+        print(
+            "Não foi possível carregar os dados das disciplinas. O arquivo não existe ou contém dados inválidos."
+        )
+    elif len(dados_disciplinas) <= 0:
         print("Ainda não existem disciplinas cadastradas.")
     else:
-        for disciplina in lista_disciplinas:
+        print("LISTA DE DISCIPLINAS:")
+        for disciplina in dados_disciplinas:
             for key, value in disciplina.items():
-                print(f"{key:<5} = {value}", end="  ")
+                print(f"{key:<5} = {value:>10}", end="  ")
             print()
-    print("=-" * 50)
 
 
 def associacao_disciplinas_alunos(lista_alunos, lista_disciplinas):

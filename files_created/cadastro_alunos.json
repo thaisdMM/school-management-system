@@ -1,0 +1,12 @@
+[
+    {
+        "nome": "Maria Penha",
+        "matricula": 123,
+        "disciplina": []
+    },
+    {
+        "nome": "João Santos",
+        "matricula": 321,
+        "disciplina": []
+    }
+]
