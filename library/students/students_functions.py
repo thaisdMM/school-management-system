@@ -15,6 +15,8 @@ def coleta_dados_alunos():
     if not project_file.verificar_arquivo_existe(file_path):
         project_file.criar_subscrever_arquivo(file_path)
     dados_alunos = project_file.ler_arquivo(file_path)
+    if dados_alunos is None:
+        dados_alunos = []
     return dados_alunos
 
 
