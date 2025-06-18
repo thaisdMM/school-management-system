@@ -95,24 +95,44 @@ def mostrar_disciplinas():
             print()
 
 
-def associacao_disciplinas_alunos(lista_alunos, lista_disciplinas):
-    for aluno in lista_alunos:
-        for disciplina in lista_disciplinas:
-            if any(
-                codigo_existente["codigo"] == disciplina["codigo"]
-                for codigo_existente in aluno["disciplina"]
-            ):
-                continue
-            else:
-                aluno["disciplina"].append(
-                    {
-                        "nome": disciplina["nome"],
-                        "codigo": disciplina["codigo"],
-                        "notas": [],
-                        "media": 0.0,
-                        "situacao": "INDEFINIDA",
-                    }
-                )
+def associacao_disciplinas_alunos():
+    students_path = path.students_absolute_path()
+    subjects_path = path.subjects_absolute_path()
+    dados_alunos = project_file.ler_arquivo(students_path)
+    dados_disciplinas = project_file.ler_arquivo(subjects_path)
+    if dados_alunos is None:
+        dados_alunos = []
+    if dados_disciplinas is None:
+        dados_disciplinas = []
+    if not dados_alunos:
+        print("Ainda não existem alunos cadastrados. Para associar aluno à disciplinas é necessário cadastrar alunos.")
+    if not dados_disciplinas:
+        print("Ainda não existem disciplinas cadastradas. Para associar aluno à disciplinas é necessário cadastrar disciplinas.")
+    else:
+        for aluno in dados_alunos:
+            for disciplina in dados_disciplinas:
+                if any(
+                    codigo_existente["codigo"] == disciplina["codigo"]
+                    for codigo_existente in aluno["disciplina"]
+                ):
+                    continue
+                else:
+                    print(f"Quer assossiar ao {aluno['nome']} a disciplina {disciplina['nome']}")
+                    resposta = project_interfaces.continuar()
+                    if not resposta:
+                        continue
+                    else:
+                        aluno["disciplina"].append(
+                            {
+                                "nome": disciplina["nome"],
+                                "codigo": disciplina["codigo"],
+                                "notas": [],
+                                "media": 0.0,
+                                "situacao": "INDEFINIDA",
+                            }
+                        )
+        #print(dados_alunos)
+        project_file.criar_subscrever_arquivo(students_path, dados_alunos)
 
 
 def existem_notas_cadastradas(lista):
