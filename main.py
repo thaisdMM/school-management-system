@@ -16,6 +16,7 @@ while True:
             "Exibir alunos cadastrados.",
             "Cadastrar disciplinas.",
             "Exibir disciplinas cadastradas.",
+            "Vincular disciplina aos alunos.",
             "Cadastrar notas por disciplina.",
             "Exibir situação de todos os alunos.",
             "Exibir a situação de um aluno específico.",
@@ -40,20 +41,27 @@ while True:
     elif resposta == 4:
         project_interfaces.titulo(f"{resposta}- Exibir disciplinas cadastradas:")
         subjects_functions.mostrar_disciplinas()
+
     elif resposta == 5:
-        project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
+        project_interfaces.titulo(f"{resposta}- Vincular disciplina aos alunos.")
+        subjects_functions.associacao_disciplinas_alunos()
+
     elif resposta == 6:
-        project_interfaces.titulo(f"{resposta}- Exibir situação de todos os alunos.")
+        project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
+        
+        
     elif resposta == 7:
+        project_interfaces.titulo(f"{resposta}- Exibir situação de todos os alunos.")
+    elif resposta == 8:
         project_interfaces.titulo(
             f"{resposta}- Exibir a situação de um aluno específico."
         )
-    elif resposta == 8:
-        project_interfaces.titulo(f"{resposta}- Excluir aluno.")
     elif resposta == 9:
+        project_interfaces.titulo(f"{resposta}- Excluir aluno.")
+    elif resposta == 10:
         project_interfaces.titulo(f"{resposta}- Trocar notas do aluno.")
 
-    elif resposta == 10:
+    elif resposta == 11:
         project_interfaces.titulo(f"{resposta}- Fim do programa.")
         sleep(1)
         print("Volte sempre.")
