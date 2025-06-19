@@ -22,6 +22,28 @@ def leia_int(msg):
             return valor_convertido
 
 
+def leia_float(msg):
+    while True:
+        try:
+            valor_digitado = input(msg)
+            valor_convertido = float(valor_digitado)
+        except (ValueError, TypeError):
+            print(f"Erro! '{valor_digitado}' Por favor digite um número real válido!")
+            continue
+        except KeyboardInterrupt:
+            print(
+                f"Erro! Entrada interrompida manualmente. Por favor, digite um número real válido ou utilize a opção de saída do programa."
+            )
+            continue
+        except EOFError:
+            print(
+                f"Erro! Nenhuma entrada foi fornecida. Por favor, digite um número real válido ou utilize a opção de saída do programa."
+            )
+            continue
+        else:
+            return valor_convertido
+
+
 def linha(tamanho=50):
     return "-" * tamanho
 
