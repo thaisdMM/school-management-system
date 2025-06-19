@@ -201,57 +201,93 @@ def verifica_conteudo_arquivos_alunos_disciplinas():
 
 
 ## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
+def coleta_notas():
+    # try:
+    notas_validas = False
+    nota1 = project_interfaces.leia_float("NOTA 1= ")
+    nota2 = project_interfaces.leia_float("NOTA 2= ")
+
+    notas = valida_notas(nota1, nota2)
+    if notas:
+        notas_validas = True
+        return nota1, nota2
+    else:
+        return notas_validas
+    # except Exception:
+    #     return None, None
+
+
+def valida_notas(nota1, nota2):
+    # if not (0 <= nota1 <= 10 and  0 <= nota2 <= 10):
+    #     return False, False
+    if nota1 >= 0 and nota1 <= 10 and nota2 >= 0 and nota2 <= 10:
+        return True, True
+    else:
+        return False, False
+
+
+def obter_codigo_disciplina_existente_com_loop(conteudo_disciplinas):
+    while True:
+        codigo_disciplina = project_interfaces.leia_int(
+            "Digite o código da disciplina que deseja cadastrar as notas: "
+        )
+        disciplina_existe = verifica_codigo_disciplina_existe(
+            codigo_disciplina, conteudo_disciplinas
+        )
+        if disciplina_existe:
+            return codigo_disciplina
+        else:
+            print(
+                "Código de disciplina inexistente. Por favor digite o código correto."
+            )
+
+
 def cadastro_notas_media_situacao_aluno():
     students_path = path.students_absolute_path()
     # subjects_path = path.subjects_absolute_path()
-
     conteudo_alunos, conteudo_disciplinas = (
         verifica_conteudo_arquivos_alunos_disciplinas()
     )
     if conteudo_alunos is None or conteudo_disciplinas is None:
         pass
     else:
-        # talvez fazer essa verificação fora do codigo
-        while True:
-            codigo_disciplina = project_interfaces.leia_int(
-                "Digite o código da disciplina que deseja cadastrar as notas: "
-            )
-            disciplina_existe = verifica_codigo_disciplina_existe(
-                codigo_disciplina, conteudo_disciplinas
-            )
-            if disciplina_existe:
-                break
-            else:
-                print(
-                    "Código de disciplina inexistente. Por favor digite o código correto."
-                )
-
-        modificou_dados = False
-        for aluno in conteudo_alunos:
-            for disciplina in aluno["disciplina"]:
-                if disciplina['codigo'] == codigo_disciplina:
-                    if disciplina['notas']:
-                        continue
-                    else:
-                        print(
-                            f"Quer cadastrar notas do aluno {aluno['nome']} para a disciplina {disciplina['nome']}"
-                        )
-                        resposta = project_interfaces.continuar()
-                        if not resposta:
+        codigo_disciplina = obter_codigo_disciplina_existente_com_loop(
+            conteudo_disciplinas
+        )
+        if codigo_disciplina:
+            modificou_dados = False
+            for aluno in conteudo_alunos:
+                for disciplina in aluno["disciplina"]:
+                    if disciplina["codigo"] == codigo_disciplina:
+                        if disciplina["notas"]:
                             continue
                         else:
-                            # buscar a função leia_float e melhorar ela par aplicar aqui
-                            nota1 = float(input("NOTA 1= "))
-                            nota2 = float(input("NOTA 2= "))
-                            disciplina["notas"] = [nota1, nota2]
                             print(
-                                f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
+                                f"Quer cadastrar notas do aluno {aluno['nome']} para a disciplina {disciplina['nome']}"
                             )
-                            modificou_dados = True
-                            # disciplina["media"] = sum(disciplina["notas"]) / len(
-                            #     disciplina["notas"]
-                            # )
-                            # situacao_aluno(aluno)
+                            resposta = project_interfaces.continuar()
+                            if not resposta:
+                                continue
+                            else:
+                                while True:
+                                    nota1, nota2 = coleta_notas()
+
+                                    if nota1 and nota2 == False:
+                                        print(
+                                            "Notas inválidas. A nota tem que ser entre 0 e até 10."
+                                        )
+                                    else:
+                                        disciplina["notas"] = [nota1, nota2]
+                                        print(
+                                            f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
+                                        )
+                                        modificou_dados = True
+                                        break
+
+                                    # else:
+                                    #     print(
+                                    #         "Notas inválidas. A nota tem que ser entre 0 e até 10."
+                                    #     )
 
         if modificou_dados:
             project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
