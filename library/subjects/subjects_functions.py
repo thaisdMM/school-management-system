@@ -144,18 +144,6 @@ def associacao_disciplinas_alunos():
             )
 
 
-def existem_notas_cadastradas(arquivo_alunos):
-    notas_cadastradas = False
-    for aluno in arquivo_alunos:
-        for disciplina in aluno["disciplina"]:
-            if disciplina["notas"]:
-                notas_cadastradas = True
-                break
-        if notas_cadastradas:
-            break
-    return notas_cadastradas
-
-
 def disciplina_associada_a_algum_aluno(lista_alunos):
     disciplina_existe = False
     for aluno in lista_alunos:
@@ -168,23 +156,24 @@ def disciplina_associada_a_algum_aluno(lista_alunos):
     return disciplina_existe
 
 
-def verifica_conteudo_arquivo(file_path):
-    conteudo = project_file.ler_arquivo(file_path)
-    if conteudo is None:
-        print(
-            "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
-        )
-        return False
-    if not conteudo:
-        print(
-            "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
-        )
-        return True
-    else:
-        return conteudo
+# Função mais genérica que a função abaixo, ver se ela terá utilidade no futuro ou apagar
+# def verifica_conteudo_arquivo(file_path):
+#     conteudo = project_file.ler_arquivo(file_path)
+#     if conteudo is None:
+#         print(
+#             "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
+#         )
+#         return False
+#     if not conteudo:
+#         print(
+#             "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
+#         )
+#         return True
+#     else:
+#         return conteudo
 
 
-def verifica_conteudo_arquivos_alunos_disciplina():
+def verifica_conteudo_arquivos_alunos_disciplinas():
     students_path = path.students_absolute_path()
     subjects_path = path.subjects_absolute_path()
     conteudo_arquivo_alunos = project_file.ler_arquivo(students_path)
@@ -193,54 +182,42 @@ def verifica_conteudo_arquivos_alunos_disciplina():
         print(
             "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
         )
+        return None, None
     if not conteudo_arquivo_disciplinas or not conteudo_arquivo_alunos:
         print(
             "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
         )
-    disciplina_associada_alunos = verifica_existencia_disciplina_lista_alunos(conteudo_arquivo_alunos)
+        return None, None
+    disciplina_associada_alunos = disciplina_associada_a_algum_aluno(
+        conteudo_arquivo_alunos
+    )
     if not disciplina_associada_alunos:
         print(
             "As diciplinas ainda não foram associadas aos alunos. Por favor, primeiro associa as diciplinas que os alunos estão cursando."
         )
+        return None, None
     else:
         return conteudo_arquivo_alunos, conteudo_arquivo_disciplinas
-
 
 
 ## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
 def cadastro_notas_media_situacao_aluno():
     students_path = path.students_absolute_path()
-    subjects_path = path.subjects_absolute_path()
-    conteudo_arquivo_alunos = project_file.ler_arquivo(students_path)
-    conteudo_arquivo_disciplinas = project_file.ler_arquivo(subjects_path)
+    # subjects_path = path.subjects_absolute_path()
 
-
-
-
-    # conteudo_arquivo_alunos = project_file.ler_arquivo(students_path)
-    # conteudo_arquivo_disciplinas = project_file.ler_arquivo(subjects_path)
-    # if conteudo_arquivo_alunos is None or conteudo_arquivo_disciplinas is None:
-    #     print(
-    #         "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
-    #     )
-
-    # if not conteudo_arquivo_disciplinas or not conteudo_arquivo_alunos:
-    #     print(
-    #         "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
-    #     )
-    # # nao deu certo pq ele chama a função de novo, eu queria que ele so pedisse o codigo se a há alguma disciplina associada ao aluno, se não hover, nao peça nada
-    # disciplina_associada_alunos = associacao_disciplinas_alunos()
-    # if not disciplina_associada_alunos:
-    #     print(
-    #         "As diciplinas ainda não foram associadas aos alunos. Por favor, primeiro associa as diciplinas que os alunos estão cursando."
-    #     )
+    conteudo_alunos, conteudo_disciplinas = (
+        verifica_conteudo_arquivos_alunos_disciplinas()
+    )
+    if conteudo_alunos is None or conteudo_disciplinas is None:
+        pass
     else:
+        # talvez fazer essa verificação fora do codigo
         while True:
             codigo_disciplina = project_interfaces.leia_int(
                 "Digite o código da disciplina que deseja cadastrar as notas: "
             )
-            disciplina_existe = buscar_disciplina(
-                conteudo_arquivo_disciplinas, codigo_disciplina
+            disciplina_existe = verifica_codigo_disciplina_existe(
+                codigo_disciplina, conteudo_disciplinas
             )
             if disciplina_existe:
                 break
@@ -250,10 +227,10 @@ def cadastro_notas_media_situacao_aluno():
                 )
 
         modificou_dados = False
-        for aluno in conteudo_arquivo_alunos:
+        for aluno in conteudo_alunos:
             for disciplina in aluno["disciplina"]:
-                if disciplina["codigo"] == codigo_disciplina:
-                    if disciplina["notas"]:
+                if disciplina['codigo'] == codigo_disciplina:
+                    if disciplina['notas']:
                         continue
                     else:
                         print(
@@ -270,17 +247,28 @@ def cadastro_notas_media_situacao_aluno():
                             print(
                                 f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
                             )
-                            disciplina["media"] = sum(disciplina["notas"]) / len(
-                                disciplina["notas"]
-                            )
-                            situacao_aluno(aluno)
                             modificou_dados = True
+                            # disciplina["media"] = sum(disciplina["notas"]) / len(
+                            #     disciplina["notas"]
+                            # )
+                            # situacao_aluno(aluno)
+
         if modificou_dados:
-            project_file.criar_subscrever_arquivo(
-                students_path, conteudo_arquivo_alunos
-            )
+            project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
         else:
             print("Não foram adicionadas novas notas a nenhum aluno.")
+
+
+def existe_alguma_nota_cadastrada(arquivo_alunos):
+    notas_cadastradas = False
+    for aluno in arquivo_alunos:
+        for disciplina in aluno["disciplina"]:
+            if disciplina["notas"]:
+                notas_cadastradas = True
+                break
+        if notas_cadastradas:
+            break
+    return notas_cadastradas
 
 
 def situacao_aluno(aluno):
