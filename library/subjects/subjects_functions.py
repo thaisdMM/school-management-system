@@ -138,40 +138,53 @@ def associacao_disciplinas_alunos():
         # print(dados_alunos)
         if modificou_dados:
             project_file.criar_subscrever_arquivo(students_path, dados_alunos)
-            # # ADICINANDO O RETORNA PARA USAR NA HORA DE CADASTRAR NOTAS
-            # return True
         else:
             print(
                 "Nenhuma nova disciplina foi adicionada a nenhum aluno ou todos os alunos já possuem as diciplinas existentes cadastradas."
             )
-            # return False
 
 
-def existem_notas_cadastradas(conteudo_arquivo_disciplinas):
-    # students_path = path.students_absolute_path()
-    # conteudo_arquivo_disciplinas = project_file.ler_arquivo(students_path)
-    # if conteudo_arquivo_disciplinas == None:
-    #     return False
+def existem_notas_cadastradas(arquivo_alunos):
     notas_cadastradas = False
-    for aluno in conteudo_arquivo_disciplinas:
+    for aluno in arquivo_alunos:
         for disciplina in aluno["disciplina"]:
             if disciplina["notas"]:
                 notas_cadastradas = True
                 break
         if notas_cadastradas:
             break
-    return True
+    return notas_cadastradas
 
 
-# def leitura_arquivo_is_none(conteudo):
-#     if conteudo is None:
-#         print(
-#             "Não foi possível carregar os dados do arquivo. O arquivo não existe ou contém dados inválidos."
-#         )
+def disciplina_associada_a_algum_aluno(lista_alunos):
+    disciplina_existe = False
+    for aluno in lista_alunos:
+        for disciplina in aluno["disciplina"]:
+            if disciplina["codigo"]:
+                disciplina_existe = True
+                break
+        if disciplina_existe:
+            break
+    return disciplina_existe
 
 
-## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
-def cadastro_notas_media_situacao_aluno():
+def verifica_conteudo_arquivo(file_path):
+    conteudo = project_file.ler_arquivo(file_path)
+    if conteudo is None:
+        print(
+            "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
+        )
+        return False
+    if not conteudo:
+        print(
+            "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
+        )
+        return True
+    else:
+        return conteudo
+
+
+def verifica_conteudo_arquivos_alunos_disciplina():
     students_path = path.students_absolute_path()
     subjects_path = path.subjects_absolute_path()
     conteudo_arquivo_alunos = project_file.ler_arquivo(students_path)
@@ -180,12 +193,42 @@ def cadastro_notas_media_situacao_aluno():
         print(
             "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
         )
-
     if not conteudo_arquivo_disciplinas or not conteudo_arquivo_alunos:
         print(
             "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
         )
-    # nao deu certo pq ele chama a função de novo, eu queria que ele so pedisse o codigo se a há alguma disciplina associada ao aluno, se não hover, nao peça nada
+    disciplina_associada_alunos = verifica_existencia_disciplina_lista_alunos(conteudo_arquivo_alunos)
+    if not disciplina_associada_alunos:
+        print(
+            "As diciplinas ainda não foram associadas aos alunos. Por favor, primeiro associa as diciplinas que os alunos estão cursando."
+        )
+    else:
+        return conteudo_arquivo_alunos, conteudo_arquivo_disciplinas
+
+
+
+## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
+def cadastro_notas_media_situacao_aluno():
+    students_path = path.students_absolute_path()
+    subjects_path = path.subjects_absolute_path()
+    conteudo_arquivo_alunos = project_file.ler_arquivo(students_path)
+    conteudo_arquivo_disciplinas = project_file.ler_arquivo(subjects_path)
+
+
+
+
+    # conteudo_arquivo_alunos = project_file.ler_arquivo(students_path)
+    # conteudo_arquivo_disciplinas = project_file.ler_arquivo(subjects_path)
+    # if conteudo_arquivo_alunos is None or conteudo_arquivo_disciplinas is None:
+    #     print(
+    #         "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
+    #     )
+
+    # if not conteudo_arquivo_disciplinas or not conteudo_arquivo_alunos:
+    #     print(
+    #         "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
+    #     )
+    # # nao deu certo pq ele chama a função de novo, eu queria que ele so pedisse o codigo se a há alguma disciplina associada ao aluno, se não hover, nao peça nada
     # disciplina_associada_alunos = associacao_disciplinas_alunos()
     # if not disciplina_associada_alunos:
     #     print(
