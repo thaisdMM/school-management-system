@@ -200,24 +200,14 @@ def verifica_conteudo_arquivos_alunos_disciplinas():
         return conteudo_arquivo_alunos, conteudo_arquivo_disciplinas
 
 
-## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
 def coleta_notas():
-    try:
-        nota1 = project_interfaces.leia_float("NOTA 1= ")
-    except KeyboardInterrupt:
-        return "KeyboardInterrupt"
-    try:
-        nota2 = project_interfaces.leia_float("NOTA 2= ")
-    except KeyboardInterrupt:
-        return "KeyboardInterrupt"
+    nota1 = project_interfaces.leia_float("NOTA 1= ")
+    nota2 = project_interfaces.leia_float("NOTA 2= ")
+    notas = valida_notas(nota1, nota2)
+    if notas:
+        return nota1, nota2
     else:
-        notas = valida_notas(nota1, nota2)
-        if notas:
-            return nota1, nota2
-        else:
-            return None
-    # except KeyboardInterrupt:
-    #     return "KeyboardInterrupt"
+        return None
 
 
 # return True or False
@@ -272,34 +262,41 @@ def cadastro_notas_aluno():
                                 while True:
                                     try:
                                         notas = coleta_notas()
+                                    except KeyboardInterrupt:
+                                        salvar_dados = None
+                                        if not modificou_dados:
+                                            sair_cadastro = True
+                                            print(
+                                                "Finalizando o progama sem salvar dados"
+                                            )
+                                            salvar_dados = False
+                                            break
+                                        else:
+
+                                            escolha = (
+                                                input(
+                                                    "Voce escolheu sair do cadastro de notas, quer salvar os dados digitados? Digite S para salvar "
+                                                )
+                                                .strip()
+                                                .upper()[0]
+                                            )
+                                            if escolha == "S":
+                                                salvar_dados = True
+                                                # project_file.criar_subscrever_arquivo(
+                                                #     students_path, conteudo_alunos
+                                                # )
+                                                sair_cadastro = True
+                                                break
+                                            else:
+                                                salvar_dados = False
+                                                sair_cadastro = True
+                                                break
+
+                                    else:
                                         if notas is None:
                                             print(
                                                 "Notas inválidas. A nota tem que ser entre 0 e até 10."
                                             )
-                                        elif notas == "KeyboardInterrupt":
-                                            salvar_dados = False
-                                            if modificou_dados:
-                                                escolha = (
-                                                    input(
-                                                        "Voce escolheu sair do cadastro de notas, quer salvar os dados digitados? Digite S para salvar "
-                                                    )
-                                                    .strip()
-                                                    .upper()[0]
-                                                )
-                                                if escolha in "S":
-                                                    salvar_dados = True
-                                                    project_file.criar_subscrever_arquivo(
-                                                        students_path, conteudo_alunos
-                                                    )
-                                                    sair_cadastro = True
-                                                    break
-                                                else:
-                                                    sair_cadastro = True
-                                                    print(
-                                                        "Finalizando o progama sem salvar dados"
-                                                    )
-                                                    break
-
                                         elif notas:
                                             nota1, nota2 = notas
                                             disciplina["notas"] = [nota1, nota2]
@@ -307,20 +304,24 @@ def cadastro_notas_aluno():
                                                 f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
                                             )
                                             modificou_dados = True
-
-                                        break
+                                            break
+                    if sair_cadastro:
+                        break
                 if sair_cadastro:
                     break
-        # if not salvar_dados:
-        #     print("Dados de cadastro de notas salvos até o momento.")
-        # # elif modificou_dados and not salvar_dados:
-        #     print("Não foram adicionadas novas notas a nenhum aluno.")
+        if sair_cadastro:
+            if salvar_dados:
+                project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
+                print("Dados de cadastro de notas salvos até o momento.")
+            else:
+                print("Não foram adicionadas novas notas a nenhum aluno.")
 
-        elif modificou_dados and not salvar_dados:
-            project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
-            print("Notas salvas no arquivo de cadastro de alunos.")
         else:
-            print("Não foram adicionadas novas notas a nenhum aluno.")
+            if modificou_dados:
+                project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
+                print("Notas salvas no arquivo de cadastro de alunos.")
+            else:
+                print("Não foram adicionadas novas notas a nenhum aluno.")
 
 
 def existe_alguma_nota_cadastrada(arquivo_alunos):
