@@ -48,7 +48,8 @@ while True:
 
     elif resposta == 6:
         project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
-        subjects_functions.mostrar_disciplinas()
+        # talvez deveria chamar na funçao de cadastro de notas de alunos, pois quando chamo ele está vazia da print dela vazia e tb o print especifico da função de cadastro de notas
+        subjects_functions.mostrar_disciplinas() 
         subjects_functions.cadastro_notas_aluno()
 
     elif resposta == 7:
