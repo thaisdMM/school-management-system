@@ -202,17 +202,22 @@ def verifica_conteudo_arquivos_alunos_disciplinas():
 
 ## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
 def coleta_notas():
-    # try:
-    nota1 = project_interfaces.leia_float("NOTA 1= ")
-    nota2 = project_interfaces.leia_float("NOTA 2= ")
-
-    notas = valida_notas(nota1, nota2)
-    if notas:
-        return nota1, nota2
+    try:
+        nota1 = project_interfaces.leia_float("NOTA 1= ")
+    except KeyboardInterrupt:
+        return "KeyboardInterrupt"
+    try:
+        nota2 = project_interfaces.leia_float("NOTA 2= ")
+    except KeyboardInterrupt:
+        return "KeyboardInterrupt"
     else:
-        return None
-    # except Exception:
-    #     return None, None
+        notas = valida_notas(nota1, nota2)
+        if notas:
+            return nota1, nota2
+        else:
+            return None
+    # except KeyboardInterrupt:
+    #     return "KeyboardInterrupt"
 
 
 # return True or False
@@ -250,11 +255,13 @@ def cadastro_notas_aluno():
         if codigo_disciplina:
             modificou_dados = False
             for aluno in conteudo_alunos:
+                sair_cadastro = False
                 for disciplina in aluno["disciplina"]:
                     if disciplina["codigo"] == codigo_disciplina:
                         if disciplina["notas"]:
                             continue
                         else:
+                            # salvar_dados = False
                             print(
                                 f"Quer cadastrar notas do aluno {aluno['nome']} para a disciplina {disciplina['nome']}"
                             )
@@ -263,21 +270,55 @@ def cadastro_notas_aluno():
                                 continue
                             else:
                                 while True:
-                                    notas = coleta_notas()
-                                    if notas is None:
-                                        print(
-                                            "Notas inválidas. A nota tem que ser entre 0 e até 10."
-                                        )
-                                    else:
-                                        nota1, nota2 = notas
-                                        disciplina["notas"] = [nota1, nota2]
-                                        print(
-                                            f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
-                                        )
-                                        modificou_dados = True
+                                    try:
+                                        notas = coleta_notas()
+                                        if notas is None:
+                                            print(
+                                                "Notas inválidas. A nota tem que ser entre 0 e até 10."
+                                            )
+                                        elif notas == "KeyboardInterrupt":
+                                            salvar_dados = False
+                                            if modificou_dados:
+                                                escolha = (
+                                                    input(
+                                                        "Voce escolheu sair do cadastro de notas, quer salvar os dados digitados? Digite S para salvar "
+                                                    )
+                                                    .strip()
+                                                    .upper()[0]
+                                                )
+                                                if escolha in "S":
+                                                    salvar_dados = True
+                                                    project_file.criar_subscrever_arquivo(
+                                                        students_path, conteudo_alunos
+                                                    )
+                                                    sair_cadastro = True
+                                                    break
+                                                else:
+                                                    sair_cadastro = True
+                                                    print(
+                                                        "Finalizando o progama sem salvar dados"
+                                                    )
+                                                    break
+
+                                        elif notas:
+                                            nota1, nota2 = notas
+                                            disciplina["notas"] = [nota1, nota2]
+                                            print(
+                                                f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
+                                            )
+                                            modificou_dados = True
+
                                         break
-        if modificou_dados:
+                if sair_cadastro:
+                    break
+        # if not salvar_dados:
+        #     print("Dados de cadastro de notas salvos até o momento.")
+        # # elif modificou_dados and not salvar_dados:
+        #     print("Não foram adicionadas novas notas a nenhum aluno.")
+
+        elif modificou_dados and not salvar_dados:
             project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
+            print("Notas salvas no arquivo de cadastro de alunos.")
         else:
             print("Não foram adicionadas novas notas a nenhum aluno.")
 
