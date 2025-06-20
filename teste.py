@@ -1,6 +1,7 @@
 from library.files import path
 from library.files import project_file
 from library.students import students_functions
+from library.subjects import subjects_functions
 
 
 # caminho2 = "files_created/cadastro_alunos_matricula.json"
@@ -18,12 +19,18 @@ from library.students import students_functions
 # conteudo = project_file.ler_arquivo(new_file)
 # print(conteudo)
 
-arquivo_estudantes = students_functions.students_file_name()
-print(arquivo_estudantes)
-caminho_absoluto_arquivo = path.absolute_file_path(arquivo_estudantes)
-print(caminho_absoluto_arquivo)
-print(project_file.verificar_arquivo_existe(caminho_absoluto_arquivo))
-print(project_file.verificar_pasta_existe())
+# arquivo_estudantes = students_functions.students_file_name()
+# print(arquivo_estudantes)
+# caminho_absoluto_arquivo = path.absolute_file_path(arquivo_estudantes)
+# print(caminho_absoluto_arquivo)
+# print(project_file.verificar_arquivo_existe(caminho_absoluto_arquivo))
+# print(project_file.verificar_pasta_existe())
 
-dados_alunos = students_functions.coleta_dados_alunos()
-print(dados_alunos)
+# dados_alunos = students_functions.coleta_dados_alunos()
+# print(dados_alunos)
+
+# alunos, disciplinas = subjects_functions.verifica_conteudo_arquivos_alunos_disciplinas()
+# if alunos is None or disciplinas is None:
+#     pass
+# else:
+#     print("alunos e disciplina existem")
