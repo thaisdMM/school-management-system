@@ -215,12 +215,9 @@ def coleta_notas():
     #     return None, None
 
 
+# return True or False
 def valida_notas(nota1, nota2):
-    # if nota1 >= 0 and nota1 <= 10 and nota2 >= 0 and nota2 <= 10:
-    if 0 <= nota1 <= 10 and 0 <= nota2 <= 10:
-        return True
-    else:
-        return False
+    return 0 <= nota1 <= 10 and 0 <= nota2 <= 10
 
 
 def obter_codigo_disciplina_existente_com_loop(conteudo_disciplinas):
@@ -239,14 +236,13 @@ def obter_codigo_disciplina_existente_com_loop(conteudo_disciplinas):
             )
 
 
-def cadastro_notas_media_situacao_aluno():
+def cadastro_notas_aluno():
     students_path = path.students_absolute_path()
-    # subjects_path = path.subjects_absolute_path()
     conteudo_alunos, conteudo_disciplinas = (
         verifica_conteudo_arquivos_alunos_disciplinas()
     )
     if conteudo_alunos is None or conteudo_disciplinas is None:
-        pass
+        return
     else:
         codigo_disciplina = obter_codigo_disciplina_existente_com_loop(
             conteudo_disciplinas
@@ -280,12 +276,6 @@ def cadastro_notas_media_situacao_aluno():
                                         )
                                         modificou_dados = True
                                         break
-
-                                    # else:
-                                    #     print(
-                                    #         "Notas inválidas. A nota tem que ser entre 0 e até 10."
-                                    #     )
-
         if modificou_dados:
             project_file.criar_subscrever_arquivo(students_path, conteudo_alunos)
         else:
