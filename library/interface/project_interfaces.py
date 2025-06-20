@@ -30,11 +30,11 @@ def leia_float(msg):
         except (ValueError, TypeError):
             print(f"Erro! '{valor_digitado}' Por favor digite um número real válido!")
             continue
-        except KeyboardInterrupt:
-            print(
-                f"Erro! Entrada interrompida manualmente. Por favor, digite um número real válido ou utilize a opção de saída do programa."
-            )
-            continue
+        # except KeyboardInterrupt:
+        #     print(
+        #         f"Erro! Entrada interrompida manualmente. Por favor, digite um número real válido ou utilize a opção de saída do programa."
+        #     )
+        #     continue
         except EOFError:
             print(
                 f"Erro! Nenhuma entrada foi fornecida. Por favor, digite um número real válido ou utilize a opção de saída do programa."
