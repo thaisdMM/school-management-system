@@ -86,13 +86,13 @@ def mostrar_disciplinas():
             "Não foi possível carregar os dados das disciplinas. O arquivo não existe ou contém dados inválidos."
         )
     # vale pra listas vazias
-    if not conteudo_arquivo_disciplinas:
+    elif not conteudo_arquivo_disciplinas:
         print("Ainda não existem disciplinas cadastradas.")
     else:
         print("LISTA DE DISCIPLINAS:")
         for disciplina in conteudo_arquivo_disciplinas:
             for key, value in disciplina.items():
-                print(f"{key:<5} = {value:>10}", end="  ")
+                print(f"{key:<5} = {value:>10} |", end="  ")
             print()
 
 
@@ -203,27 +203,24 @@ def verifica_conteudo_arquivos_alunos_disciplinas():
 ## se eu quisesse colocar mais notas, eu podia colocar aquele argumento com * ou ** ao invés de definir só nota 1 e 2
 def coleta_notas():
     # try:
-    notas_validas = False
     nota1 = project_interfaces.leia_float("NOTA 1= ")
     nota2 = project_interfaces.leia_float("NOTA 2= ")
 
     notas = valida_notas(nota1, nota2)
     if notas:
-        notas_validas = True
         return nota1, nota2
     else:
-        return notas_validas
+        return None
     # except Exception:
     #     return None, None
 
 
 def valida_notas(nota1, nota2):
-    # if not (0 <= nota1 <= 10 and  0 <= nota2 <= 10):
-    #     return False, False
-    if nota1 >= 0 and nota1 <= 10 and nota2 >= 0 and nota2 <= 10:
-        return True, True
+    # if nota1 >= 0 and nota1 <= 10 and nota2 >= 0 and nota2 <= 10:
+    if 0 <= nota1 <= 10 and 0 <= nota2 <= 10:
+        return True
     else:
-        return False, False
+        return False
 
 
 def obter_codigo_disciplina_existente_com_loop(conteudo_disciplinas):
@@ -270,13 +267,13 @@ def cadastro_notas_media_situacao_aluno():
                                 continue
                             else:
                                 while True:
-                                    nota1, nota2 = coleta_notas()
-
-                                    if nota1 and nota2 == False:
+                                    notas = coleta_notas()
+                                    if notas is None:
                                         print(
                                             "Notas inválidas. A nota tem que ser entre 0 e até 10."
                                         )
                                     else:
+                                        nota1, nota2 = notas
                                         disciplina["notas"] = [nota1, nota2]
                                         print(
                                             f"As notas: {disciplina['notas']} foram cadastras com sucesso para o aluno(a) {aluno['nome']}  em {disciplina['nome']}"
