@@ -48,7 +48,8 @@ while True:
 
     elif resposta == 6:
         project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
-        subjects_functions.cadastro_notas_media_situacao_aluno()
+        subjects_functions.mostrar_disciplinas()
+        subjects_functions.cadastro_notas_aluno()
 
     elif resposta == 7:
         project_interfaces.titulo(f"{resposta}- Exibir situação de todos os alunos.")
@@ -68,4 +69,3 @@ while True:
         break
 
     sleep(1)
-print(lista_alunos)
