@@ -157,20 +157,20 @@ def disciplina_associada_a_algum_aluno(lista_alunos):
 
 
 # Função mais genérica que a função abaixo, ver se ela terá utilidade no futuro ou apagar
-# def verifica_conteudo_arquivo(file_path):
-#     conteudo = project_file.ler_arquivo(file_path)
-#     if conteudo is None:
-#         print(
-#             "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
-#         )
-#         return False
-#     if not conteudo:
-#         print(
-#             "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
-#         )
-#         return True
-#     else:
-#         return conteudo
+def verifica_conteudo_arquivo(file_path):
+    conteudo = project_file.ler_arquivo(file_path)
+    if conteudo is None:
+        print(
+            "Não foi possível carregar os dados dos alunos e/ou disciplinas. O arquivo não existe ou contém dados inválidos."
+        )
+        return None
+    if not conteudo:
+        print(
+            "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
+        )
+        return None
+    else:
+        return conteudo
 
 
 def verifica_conteudo_arquivos_alunos_disciplinas():
@@ -336,28 +336,111 @@ def existe_alguma_nota_cadastrada(arquivo_alunos):
     return notas_cadastradas
 
 
-def situacao_aluno(aluno):
-    for valor in aluno["disciplina"]:
-        if len(valor["notas"]) <= 0:
-            situacao = "INDEFINIDA"
-        else:
-            if valor["media"] >= 7:
-                situacao = "APROVADO"
-            elif valor["media"] >= 5:
-                situacao = "RECUPERAÇÃO"
+def media_notas(disciplina):
+    media = sum(disciplina["notas"]) / len(disciplina["notas"])
+    return media
+
+
+def situacao_aluno(disciplina):
+    # for disciplina in aluno["disciplina"]:
+    if len(disciplina["notas"]) <= 0:
+        return "INDEFINIDA"
+    elif disciplina["media"] >= 7:
+        return "APROVADO"
+    elif disciplina["media"] >= 5:
+        return "RECUPERAÇÃO"
+    else:
+        return "REPROVADO"
+    # valor["situacao"] = situacao
+    return situacao
+
+
+def vincular_situação_aluno():
+
+    file_path = path.students_absolute_path()
+    conteudo_alunos = verifica_conteudo_arquivo(file_path)
+    modificou_arquivo = False
+
+    for aluno in conteudo_alunos:
+        for disciplina in aluno["disciplina"]:
+            if len(disciplina["notas"]) <= 0:
+                continue
             else:
-                situacao = "REPROVADO"
-        valor["situacao"] = situacao
-    return
+                disciplina["situacao"] = situacao_aluno(disciplina)
+                modificou_arquivo = True
+    if modificou_arquivo:
+        project_file.criar_subscrever_arquivo(file_path, conteudo_alunos)
+        return True
+        # print("Arquivo de alunos modificado.")
+    else:
+        return False
+        # print("Arquivo de alunos não foi modificado.")
 
 
-def exibir_situacao_aluno(aluno):
-    for valor in aluno["disciplina"]:
-        print(f"A situação de {aluno['nome']} é: ")
-        print(f"{valor['nome']} = {valor['situacao']}")
-        print()
-    print("-" * 50)
-    return
+def definir_media_situação_aluno():
+    file_path = path.students_absolute_path()
+    conteudo_alunos = verifica_conteudo_arquivo(file_path)
+    modificou_arquivo = False
+    for aluno in conteudo_alunos:
+        for disciplina in aluno["disciplina"]:
+            if len(disciplina["notas"]) <= 0:
+                continue
+            else:
+                # print(aluno)
+                # print(disciplina)
+                disciplina["media"] = media_notas(disciplina)
+                # disciplina["situacao"] = situacao_aluno(disciplina)
+                # print(aluno)
+                # print(disciplina)
+                modificou_arquivo = True
+    # for aluno in conteudo_alunos:
+    #     for disciplina in aluno["disciplina"]:
+    #         if len(disciplina["notas"]) <= 0:
+    #             continue
+    #         else:
+    #             disciplina["situacao"] = situacao_aluno(aluno)
+    #             modificou_arquivo = True
+    if modificou_arquivo:
+        project_file.criar_subscrever_arquivo(file_path, conteudo_alunos)
+        return True
+        # print("Arquivo de alunos modificado.")
+    else:
+        return False
+        # print("Arquivo de alunos não foi modificado.")
+
+
+def vincular_media_situação_aluno():
+    # file_path = path.students_absolute_path()
+    conteudo_alunos, conteudo_disciplina = (
+        verifica_conteudo_arquivos_alunos_disciplinas()
+    )
+    if conteudo_alunos is None or conteudo_disciplina is None:
+        return
+    else:
+        algum_aluno_com_nota = existe_alguma_nota_cadastrada(conteudo_alunos)
+        if not algum_aluno_com_nota:
+            print(
+                "Ainda não existe nenhuma nota cadastrada a nenhum dos alunos. Por favor cadastre notas primeiro."
+            )
+        else:
+            definir_media_situação_aluno()
+            return True
+
+
+def exibir_situacao_aluno():
+
+    media_situcao_aluno = vincular_media_situação_aluno()
+    if media_situcao_aluno:
+        situacao_aluno = vincular_situação_aluno()
+        file_path = path.students_absolute_path()
+        conteudo_alunos = verifica_conteudo_arquivo(file_path)
+        for aluno in conteudo_alunos:
+            for disciplina in aluno["disciplina"]:
+                print(f"A situação de {aluno['nome']} é: ")
+                print(f"{disciplina['nome']} = {disciplina['situacao']}")
+                print()
+    else:
+        print("Não foi possível exibir a situação dos alunos.")
 
 
 def buscar_disciplina(lista_disciplina, codigo):
