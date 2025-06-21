@@ -54,6 +54,8 @@ while True:
 
     elif resposta == 7:
         project_interfaces.titulo(f"{resposta}- Exibir situação de todos os alunos.")
+       # subjects_functions.definir_media_situação_aluno()
+        subjects_functions.exibir_situacao_aluno()
     elif resposta == 8:
         project_interfaces.titulo(
             f"{resposta}- Exibir a situação de um aluno específico."
