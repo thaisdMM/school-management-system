@@ -86,7 +86,7 @@ def mostrar_alunos():
     elif len(dados_arquivo) <= 0:
         print("Ainda não existem alunos cadastrados no arquivo de alunos.")
     else:
-        print("LISTA DE ALUNOS:")
+        print("LISTA DE ALUNOS:\n".center(30))
         for aluno in dados_arquivo:
             print(f"{aluno['nome']:<30}| matrícula: {aluno['matricula']:>10}", end="")
             print()
