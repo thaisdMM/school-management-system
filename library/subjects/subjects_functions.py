@@ -396,83 +396,40 @@ def definir_media_situação_aluno():
         return False
 
 
-# def vincular_situação_aluno():
-
-#     file_path = path.students_absolute_path()
-#     conteudo_alunos = verifica_conteudo_arquivo(file_path)
-#     modificou_arquivo = False
-
-#     for aluno in conteudo_alunos:
-#         for disciplina in aluno["disciplina"]:
-#             if len(disciplina["notas"]) <= 0:
-#                 continue
-#             elif disciplina["situacao"] == situacao_aluno(disciplina):
-#                 continue
-#             else:
-#                 disciplina["situacao"] = situacao_aluno(disciplina)
-#                 modificou_arquivo = True
-#     if modificou_arquivo:
-#         project_file.criar_subscrever_arquivo(file_path, conteudo_alunos)
-#         return True
-#         # print("Arquivo de alunos modificado.")
-#     else:
-#         return False
-#         # print("Arquivo de alunos não foi modificado.")
-
-
-# def definir_media_situação_aluno():
-#     file_path = path.students_absolute_path()
-#     conteudo_alunos = verifica_conteudo_arquivo(file_path)
-#     modificou_arquivo = False
-#     for aluno in conteudo_alunos:
-#         for disciplina in aluno["disciplina"]:
-#             if len(disciplina["notas"]) <= 0:
-#                 continue
-#             else:
-#                 media1 = disciplina["media"]
-#                 media2 = media_notas(disciplina)
-#                 if abs(media1 - media2) < 0.01:
-#                     continue
-#                 else:
-#                     disciplina["media"] = media2
-#                     modificou_arquivo = True
-#     if modificou_arquivo:
-#         project_file.criar_subscrever_arquivo(file_path, conteudo_alunos)
-#         return True
-#     else:
-#         return False
-
-
-def verificar_dados_arquivos_alunos_disciplinas():
+def verificar_dados_arquivos():
     conteudo_alunos, conteudo_disciplina = (
         verifica_conteudo_arquivos_alunos_disciplinas()
     )
     if conteudo_alunos is None or conteudo_disciplina is None:
-        return 
+        return None
     else:
         algum_aluno_com_nota = existe_alguma_nota_cadastrada(conteudo_alunos)
         if not algum_aluno_com_nota:
             print(
                 "Ainda não existe nenhuma nota cadastrada a nenhum dos alunos. Por favor cadastre notas primeiro."
             )
-            #return False
+            return None
         else:
-            calcular_media_situacao = definir_media_situação_aluno()
-            if calcular_media_situacao:
-                return True
-            else:
-                return False
+            return conteudo_alunos, conteudo_disciplina
+
+
+def modificar_dados_media_situacao():
+    conteudo = verificar_dados_arquivos()
+    if conteudo is None:
+        return None
+    else:
+        definir_media_situação_aluno()
+    file_path = path.students_absolute_path()
+    conteudo = project_file.ler_arquivo(file_path)
+    return conteudo
 
 
 def exibir_situacao_aluno():
-    media_situcao_aluno = vincular_media_situação_aluno()
-    # if not media_situcao_aluno:
-    #     return
-    # else:
-    if media_situcao_aluno:
-        file_path = path.students_absolute_path()
-        conteudo_alunos = verifica_conteudo_arquivo(file_path)
-        aluno_sem_disciplina = None
+    conteudo_alunos = modificar_dados_media_situacao()
+    if conteudo_alunos is None:
+        return None
+    else:
+        aluno_sem_disciplina = False
         for aluno in conteudo_alunos:
             if not aluno["disciplina"]:
                 aluno_sem_disciplina = True
@@ -482,10 +439,10 @@ def exibir_situacao_aluno():
                 print(f"{disciplina['nome']} = {disciplina['situacao']}")
                 print()
 
-    if aluno_sem_disciplina:
-        print(
-            "Existem alunos(as) que ainda não possuem disciplina e nem notas vinculadas."
-        )
+        if aluno_sem_disciplina:
+            print(
+                "Existem alunos(as) que ainda não possuem disciplina(s) e nem nota(s) vinculadas."
+            )
 
 
 def buscar_disciplina(lista_disciplina, codigo):
