@@ -341,13 +341,12 @@ def media_notas(disciplina):
     return media
 
 
-def situacao_aluno(disciplina):
-    # for disciplina in aluno["disciplina"]:
-    if len(disciplina["notas"]) <= 0:
+def situacao_aluno(media):
+    if not media:
         return "INDEFINIDA"
-    elif disciplina["media"] >= 7:
+    elif media >= 7:
         return "APROVADO"
-    elif disciplina["media"] >= 5:
+    elif media >= 5:
         return "RECUPERAÇÃO"
     else:
         return "REPROVADO"
@@ -385,11 +384,14 @@ def definir_media_situação_aluno():
         for disciplina in aluno["disciplina"]:
             if len(disciplina["notas"]) <= 0:
                 continue
-            elif disciplina["media"] == media_notas(disciplina):
-                continue
             else:
-                disciplina["media"] = media_notas(disciplina)
-                modificou_arquivo = True
+                media1 = disciplina["media"]
+                media2 = media_notas(disciplina)
+                if abs(media1 - media2) < 0.01:
+                    continue
+                else:
+                    disciplina["media"] = media2
+                    modificou_arquivo = True
     if modificou_arquivo:
         project_file.criar_subscrever_arquivo(file_path, conteudo_alunos)
         return True
@@ -424,15 +426,13 @@ def exibir_situacao_aluno():
         conteudo_alunos = verifica_conteudo_arquivo(file_path)
         aluno_sem_disciplina = None
         for aluno in conteudo_alunos:
-            for disciplina in aluno["disciplina"]:
-                if not disciplina:
+            if not aluno["disciplina"]:
                     aluno_sem_disciplina = True
-                    continue
-                else:
-
-                    print(f"A situação de {aluno['nome']} é: ")
-                    print(f"{disciplina['nome']} = {disciplina['situacao']}")
-                    print()
+                    continue               
+            for disciplina in aluno["disciplina"]:
+                print(f"A situação de {aluno['nome']} é: ")
+                print(f"{disciplina['nome']} = {disciplina['situacao']}")
+                print()
     if aluno_sem_disciplina:
         print(
             "Existem alunos(as) que ainda não possuem disciplina e nem notas vinculadas."
