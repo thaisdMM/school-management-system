@@ -399,6 +399,22 @@ def definir_media_situação_aluno():
         return False
 
 
+def atualizar_valor_das_disciplinas_aluno(lista_alunos, chave_alvo_atualizacao, funcao_calculo_atualizacao):
+    modificou_conteudo = False
+    for aluno in lista_alunos:
+        for disciplina in aluno['disciplina']:
+            if len(disciplina['notas']) <= 0:
+                continue
+            valor_atual = disciplina.get(chave_alvo_atualizacao)
+            valor_calculado = funcao_calculo_atualizacao(disciplina)
+            if valor_atual != valor_calculado:
+                disciplina[chave_alvo_atualizacao] = valor_calculado
+                modificou_conteudo = True
+    return modificou_conteudo
+
+
+
+
 def vincular_media_situação_aluno():
     # file_path = path.students_absolute_path()
     conteudo_alunos, conteudo_disciplina = (
