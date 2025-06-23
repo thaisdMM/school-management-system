@@ -2,6 +2,7 @@ from library.subjects import subjects
 from library.files import project_file
 from library.interface import project_interfaces
 from library.files import path
+from library.files import data_validation
 
 
 def students_file_name():
@@ -68,14 +69,9 @@ def cadastro_alunos():
 
 
 def mostrar_alunos():
-    file_path = path.students_absolute_path()
-    dados_arquivo = project_file.ler_arquivo(file_path)
+    dados_arquivo = data_validation.verifica_integridade_arquivo_alunos()
     if dados_arquivo is None:
-        print(
-            "Não foi possível carregar os dados dos alunos. O arquivo não existe ou contém dados inválidos."
-        )
-    elif len(dados_arquivo) <= 0:
-        print("Ainda não existem alunos cadastrados no arquivo de alunos.")
+        return None
     else:
         print("LISTA DE ALUNOS:\n".center(30))
         for aluno in dados_arquivo:
