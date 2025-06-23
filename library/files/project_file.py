@@ -1,3 +1,7 @@
+# FIXME [dívida técnica intencional]: este print pode gerar duplicidade com mensagens da camada de interface.
+# Será refatorado ao final do projeto, quando a estrutura funcional estiver completa.
+
+
 from library.files import path
 import os
 import json
