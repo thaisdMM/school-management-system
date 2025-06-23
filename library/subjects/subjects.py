@@ -83,15 +83,18 @@ def mostrar_disciplinas():
         print(
             "Não foi possível carregar os dados das disciplinas. O arquivo não existe ou contém dados inválidos."
         )
+        return False
     # vale pra listas vazias
     elif not conteudo_arquivo_disciplinas:
         print("Ainda não existem disciplinas cadastradas.")
+        return False
     else:
         print("LISTA DE DISCIPLINAS:")
         for disciplina in conteudo_arquivo_disciplinas:
             for key, value in disciplina.items():
                 print(f"{key:<5} = {value:>10} |", end="  ")
             print()
+        return True
 
 
 def associacao_disciplinas_alunos():
