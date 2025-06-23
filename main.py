@@ -1,7 +1,8 @@
 from library.interface import project_interfaces
-from library.students import students_functions
+from library.students import students
 from library.files import project_file
-from library.subjects import subjects_functions
+from library.subjects import subjects
+from library.grades import grades
 from time import sleep
 import os
 import json
@@ -28,34 +29,35 @@ while True:
 
     if resposta == 1:
         project_interfaces.titulo(f"{resposta}- Cadastrar alunos.")
-        students_functions.cadastro_alunos()
+        students.cadastro_alunos()
 
     elif resposta == 2:
         project_interfaces.titulo(f"{resposta}- Exibir alunos cadastrados:")
-        students_functions.mostrar_alunos()
+        students.mostrar_alunos()
 
     elif resposta == 3:
         project_interfaces.titulo(f"{resposta}- Cadastrar disciplinas.")
-        subjects_functions.cadastro_disciplinas()
+        subjects.cadastro_disciplinas()
 
     elif resposta == 4:
         project_interfaces.titulo(f"{resposta}- Exibir disciplinas cadastradas:")
-        subjects_functions.mostrar_disciplinas()
+        subjects.mostrar_disciplinas()
 
     elif resposta == 5:
         project_interfaces.titulo(f"{resposta}- Vincular disciplina aos alunos.")
-        subjects_functions.associacao_disciplinas_alunos()
+        subjects.associacao_disciplinas_alunos()
 
     elif resposta == 6:
         project_interfaces.titulo(f"{resposta}- Cadastrar notas por disciplina.")
-        # talvez deveria chamar na funçao de cadastro de notas de alunos, pois quando chamo ele está vazia da print dela vazia e tb o print especifico da função de cadastro de notas
-        subjects_functions.mostrar_disciplinas() 
-        subjects_functions.cadastro_notas_aluno()
+        exibir_disciplinas = subjects.mostrar_disciplinas()
+        if not exibir_disciplinas:
+            continue
+        else:
+            grades.cadastro_notas_aluno()
 
     elif resposta == 7:
         project_interfaces.titulo(f"{resposta}- Exibir situação de todos os alunos.")
-       # subjects_functions.definir_media_situação_aluno()
-        subjects_functions.exibir_situacao_aluno()
+        grades.exibir_situacao_aluno()
     elif resposta == 8:
         project_interfaces.titulo(
             f"{resposta}- Exibir a situação de um aluno específico."
