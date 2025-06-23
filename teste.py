@@ -1,7 +1,7 @@
 from library.files import path
 from library.files import project_file
-from library.students import students_functions
-from library.subjects import subjects_functions
+from library.students import students
+from library.subjects import subjects
 
 
 # caminho2 = "files_created/cadastro_alunos_matricula.json"
