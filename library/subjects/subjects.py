@@ -2,7 +2,6 @@ from library.files import path
 from library.files import project_file
 from library.interface import project_interfaces
 from library.students import students
-import os
 
 
 def subjects_file_name():
@@ -70,7 +69,6 @@ def cadastro_disciplinas():
         print(
             f"Disciplina: {nome_disciplina}, código: {codigo_disciplina}  cadastrada com sucesso!"
         )
-        # associacao_disciplinas_alunos(lista_alunos, [disciplina])
         resposta = project_interfaces.continuar()
         if not resposta:
             project_file.criar_subscrever_arquivo(subjects_path, dados_disciplinas)
@@ -156,13 +154,13 @@ def disciplina_associada_a_algum_aluno(lista_alunos):
     return disciplina_existe
 
 
-def obter_codigo_disciplina_existente_com_loop(conteudo_disciplinas):
+def obter_codigo_disciplina_existente_com_loop(lista_disciplinas):
     while True:
         codigo_disciplina = project_interfaces.leia_int(
             "Digite o código da disciplina que deseja cadastrar as notas: "
         )
         disciplina_existe = verifica_codigo_disciplina_existe(
-            codigo_disciplina, conteudo_disciplinas
+            codigo_disciplina, lista_disciplinas
         )
         if disciplina_existe:
             return codigo_disciplina
@@ -172,8 +170,8 @@ def obter_codigo_disciplina_existente_com_loop(conteudo_disciplinas):
             )
 
 
-def buscar_disciplina(lista_disciplina, codigo):
-    for disciplina in lista_disciplina:
+def buscar_disciplina(lista_disciplinas, codigo):
+    for disciplina in lista_disciplinas:
         if disciplina["codigo"] == codigo:
             return disciplina
     return None
