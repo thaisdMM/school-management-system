@@ -4,7 +4,20 @@ from library.grades import grades
 from library.subjects import subjects
 
 
-# Função mais genérica que a função abaixo, ver se ela terá utilidade no futuro ou apagar
+# Função mais genérica que a função abaixo:
+# pode ficar melhor se receber uma msg como parametro, pq ai eu posso personalizar a msg de print e usar ela em outros lugares
+def verifica_conteudo_arquivo_msg_generica(file_path, msg1, msg2):
+    conteudo = project_file.ler_arquivo(file_path)
+    if conteudo is None:
+        print(msg1)
+        return None
+    if not conteudo:
+        print(msg2)
+        return None
+    else:
+        return conteudo
+
+
 def verifica_conteudo_arquivo(file_path):
     conteudo = project_file.ler_arquivo(file_path)
     if conteudo is None:
@@ -63,3 +76,11 @@ def verificar_integridade_para_media_situacao():
             return None
         else:
             return conteudo_alunos, conteudo_disciplina
+
+
+def verifica_integridade_arquivo_alunos():
+    file_path = path.students_absolute_path()
+    msg1 = "Não foi possível carregar os dados dos alunos. O arquivo não existe ou contém dados inválidos."
+    msg2 = "Ainda não existem alunos cadastrados no arquivo de alunos."
+    conteudo = verifica_conteudo_arquivo_msg_generica(file_path, msg1, msg2)
+    return conteudo
