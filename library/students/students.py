@@ -1,4 +1,4 @@
-from library.subjects import subjects_functions
+from library.subjects import subjects
 from library.files import project_file
 from library.interface import project_interfaces
 from library.files import path
@@ -67,13 +67,6 @@ def cadastro_alunos():
         if not decisao:
             project_file.criar_subscrever_arquivo(file_path, dados_alunos)
             break
-
-    # criar outra função para essa associaçao?
-    # associacao_disciplinas_alunos(lista_alunos, lista_disciplinas)
-    # print(
-    #     f"{nome_aluno}: foi cadastrado(a) com sucesso com a matrícula {matricula_aluno}!"
-    # )
-    # print("=-" * 50)
 
 
 def mostrar_alunos():
