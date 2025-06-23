@@ -1,7 +1,7 @@
 from library.files import project_file
 from library.files import path
-from library.students import students
 from library.grades import grades
+from library.subjects import subjects
 
 
 # Função mais genérica que a função abaixo, ver se ela terá utilidade no futuro ou apagar
@@ -36,7 +36,7 @@ def verificar_integridade_arquivos_alunos_disciplinas():
             "Ainda não existem disciplinas e/ou alunos cadastradas. Primeiro cadastre disciplina e/ou aluno."
         )
         return None, None
-    disciplina_associada_alunos = students.disciplina_associada_a_algum_aluno(
+    disciplina_associada_alunos = subjects.disciplina_associada_a_algum_aluno(
         conteudo_arquivo_alunos
     )
     if not disciplina_associada_alunos:
