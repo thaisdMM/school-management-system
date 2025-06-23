@@ -2,8 +2,6 @@ from library.subjects import subjects
 from library.files import project_file
 from library.interface import project_interfaces
 from library.files import path
-import json
-import os
 
 
 def students_file_name():
