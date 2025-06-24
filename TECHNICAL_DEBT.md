@@ -49,3 +49,24 @@ In future stages, this will be migrated to a structured database system (e.g. SQ
 **Decision:** Keep code procedural for now to maximize clarity and focus on control flow and data structure handling.
 
 **Planned improvement:** After learning Python OOP concepts, classes and design patterns.
+
+---
+
+## 5. Pending improvements in flow control and usability for student display and deletion functions
+
+**Date recorded:** 2025-06-24  
+**Location:** `verifica_dados_aluno_específico()` and `controlar_exclusao_aluno_apos_validacao()`  
+**Issue:**  
+These functions currently validate data and manage list state correctly, but there is no clean exit path before entering a student ID. The `leia_int()` function does not yet handle `KeyboardInterrupt`, preventing graceful termination. Additionally, the `continuar()` function could be refactored to accept a custom message.
+
+**Decision:**  
+These enhancements will be addressed after the core system is completed. `leia_int()` will be extended to handle `KeyboardInterrupt`, and `continuar()` will be adapted to support a parameterized prompt. An optional mechanism to display the list of student IDs before input may also be introduced.
+
+**Planned improvement:**
+
+- Add `KeyboardInterrupt` handling in input functions like `leia_int()`, allowing clean exit.
+- Refactor `continuar()` to support custom messages.
+- Consider implementing optional display of the student list before selection by ID.
+
+**Responsible:** Thaís Moreira  
+**Status:** Future refactoring — to be implemented after core project delivery.
