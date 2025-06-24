@@ -232,59 +232,117 @@ def exibir_situacao_aluno():
 # 4- ter uma lista salva em memoria e fazer um loop, só mudar o arquivo quando acabar o loop
 
 
-def buscar_notas_por_disciplina(aluno, disciplina_codigo, nova_nota1, nova_nota2):
+def buscar_notas_por_disciplina(aluno, disciplina_codigo):
     for disciplina in aluno["disciplina"]:
         if disciplina["codigo"] == disciplina_codigo:
-            disciplina["notas"] = [nova_nota1, nova_nota2]
-            disciplina["media"] = sum(disciplina["notas"]) / len(disciplina["notas"])
-            situacao_aluno(aluno)
-            return True
-    return False
-
-
-def atualizar_valor_disciplina_especifica_aluno(
-    lista_alunos, chave_alvo_atualizacao, funcao_calculo_atualizacao
-):
-    modificou_conteudo = False
-    aluno_buscado = students.verifica_dados_aluno_específico(lista_alunos)
-    for disciplina in aluno_buscado["disciplina"]:
-        valor_atual = disciplina.get(chave_alvo_atualizacao)
-        valor_calculado = funcao_calculo_atualizacao
-        if valor_atual != valor_calculado:
-            disciplina[chave_alvo_atualizacao] = valor_calculado
-            modificou_conteudo = True
-    return modificou_conteudo
+            return disciplina
+        else:
+            return False
 
 
 def controlar_mudanca_notas_aluno():
     file_path = path.students_absolute_path()
-    conteudo_arquivos= (data_validation.verificar_integridade_para_media_situacao()
-    )
+    conteudo_arquivos = data_validation.verificar_integridade_para_media_situacao()
+    sair_cadastro = None
     if conteudo_arquivos is None:
         return None
-    else:
+    if conteudo_arquivos is not None:
         lista_alunos, lista_disciplinas = conteudo_arquivos
         # loop
-        # while True:
-        # aluno_buscado = students.verifica_dados_aluno_específico(lista_alunos)
-        # if aluno_buscado:
-        #     print(f"{aluno_buscado}")
-        try:
-            valor_atualizado = atualizar_valor_disciplina_especifica_aluno(
-                lista_alunos, "notas", coleta_notas
+        while True:
+            aluno_buscado = students.verifica_dados_aluno_específico(lista_alunos)
+            if not aluno_buscado:
+                continue
+            else:
+                break
+        # ESTÁ DANDO PROBLEMA NESSA PARTE DO CODIGO, ENTRA NA DISCIPLINA CORRETA, MAS SAI DO PROGRAMA. VERIFICAR AS FUNÇÕES
+        while True:
+            codigo_disciplina = subjects.obter_codigo_disciplina_existente_com_loop(
+                lista_disciplinas
             )
-        except KeyboardInterrupt:
-            print(
-                "Você escolheu interromper a atualização das notas. Finalizando o programa sem salvar dados."
-            )
-        else:
-            if valor_atualizado:
-                print("Valor atualizado")
-                print(lista_alunos)
-                #print(f"{aluno_buscado}")
+            # if not codigo_disciplina:
+            #     #break
+            # else:
+            if codigo_disciplina:
 
-                # rodar o codigo do for para disciplina
-                # E seu eu usar essa função? o problema é o lop será que faço outra parecida com essa?
+                disciplina_existe = buscar_notas_por_disciplina(
+                    aluno_buscado, codigo_disciplina
+                )
+                if not disciplina_existe:
+                    print(
+                        f"A disciplina com o {disciplina_existe['nome']} não está vinculada ao aluno {aluno_buscado['nome']}."
+                    )
+                    print(
+                        f"Ainda quer mudar as notas de algum(a) aluno(a) ou deseja sair do cadastro de notas?"
+                    )
+                else:
+                    print({disciplina_existe})
+                    # resposta = project_interfaces.continuar()
+                # if not resposta:
+                #     continue
+                # else:
+                #     while True:
+                #         try:
+                #             novas_notas = coleta_notas()
+                #         except KeyboardInterrupt:
+                #             salvar_dados = None
+                #             if not modificou_dados:
+                #                 sair_cadastro = True
+                #                 print("Finalizando o progama sem salvar dados")
+                #                 salvar_dados = False
+                #                 break
+                #             else:
+                #                 escolha = (
+                #                     input(
+                #                         "Voce escolheu sair do cadastro de notas, quer salvar os dados digitados? Digite S para salvar "
+                #                     )
+                #                     .strip()
+                #                     .upper()[0]
+                #                 )
+                #                 if escolha == "S":
+                #                     salvar_dados = True
+                #                     sair_cadastro = True
+                #                     break
+                #                 else:
+                #                     salvar_dados = False
+                #                     sair_cadastro = True
+                #                     break
+
+                #         else:
+                #             if novas_notas is None:
+                #                 print(
+                #                     "Notas inválidas. A nota tem que ser entre 0 e até 10."
+                #                 )
+                #             elif novas_notas:
+                #                 nova_nota1, nova_nota2 = novas_notas
+                #                 disciplina_existe["notas"] = [
+                #                     nova_nota1,
+                #                     nova_nota2,
+                #                 ]
+                #                 print(
+                #                     f"As novas notas: {disciplina_existe['notas']} foram cadastras com sucesso para o aluno(a) {aluno_buscado['nome']}  em {disciplina_existe['nome']}"
+                #                 )
+                #                 modificou_dados = True
+                #                 break
+
+    # if sair_cadastro:
+    #     if salvar_dados:
+    #         project_file.criar_subscrever_arquivo(file_path, lista_alunos)
+    #         print("Dados de cadastro de notas salvos até o momento.")
+    #     else:
+    #         print("Não foram adicionadas novas notas a nenhum aluno.")
+
+    # else:
+    #     if modificou_dados:
+    #         project_file.criar_subscrever_arquivo(file_path, lista_alunos)
+    #         print("Notas salvas no arquivo de cadastro de alunos.")
+    #     else:
+    #         print("Não foram adicionadas novas notas a nenhum aluno.")
+
+    # print(f"{aluno_buscado}")
+
+    # rodar o codigo do for para disciplina
+    # E seu eu usar essa função? o problema é o lop será que faço outra parecida com essa?
 
 
 #                 # atualizar_valor_das_disciplinas_aluno(
