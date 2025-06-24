@@ -3,6 +3,7 @@ from library.files import path
 from library.files import data_validation
 from library.subjects import subjects
 from library.files import project_file
+from library.students import students
 
 
 def coleta_notas():
@@ -214,11 +215,92 @@ def exibir_situacao_aluno():
             )
 
 
-def mudar_notas(aluno, disciplina_codigo, nova_nota1, nova_nota2):
-    for nota in aluno["disciplina"]:
-        if nota["codigo"] == disciplina_codigo:
-            nota["notas"] = [nova_nota1, nova_nota2]
-            nota["media"] = sum(nota["notas"]) / len(nota["notas"])
+# def mudar_notas(aluno, disciplina_codigo, nova_nota1, nova_nota2):
+#     for disciplina in aluno["disciplina"]:
+#         if disciplina["codigo"] == disciplina_codigo:
+#             disciplina["notas"] = [nova_nota1, nova_nota2]
+#             disciplina["media"] = sum(disciplina["notas"]) / len(disciplina["notas"])
+#             situacao_aluno(aluno)
+#             return True
+#     return False
+
+
+# MUDAR NOTAS:
+# 1- verificar conteudo de arquivo de alunos e disciplina
+# 2- pedir matricula aluno verificar se o aluno existe
+# 3- pedir codigo de disciplina e verificar se existe para o aluno?
+# 4- ter uma lista salva em memoria e fazer um loop, só mudar o arquivo quando acabar o loop
+
+
+def buscar_notas_por_disciplina(aluno, disciplina_codigo, nova_nota1, nova_nota2):
+    for disciplina in aluno["disciplina"]:
+        if disciplina["codigo"] == disciplina_codigo:
+            disciplina["notas"] = [nova_nota1, nova_nota2]
+            disciplina["media"] = sum(disciplina["notas"]) / len(disciplina["notas"])
             situacao_aluno(aluno)
             return True
     return False
+
+
+def atualizar_valor_disciplina_especifica_aluno(
+    lista_alunos, chave_alvo_atualizacao, funcao_calculo_atualizacao
+):
+    modificou_conteudo = False
+    aluno_buscado = students.verifica_dados_aluno_específico(lista_alunos)
+    for disciplina in aluno_buscado["disciplina"]:
+        valor_atual = disciplina.get(chave_alvo_atualizacao)
+        valor_calculado = funcao_calculo_atualizacao
+        if valor_atual != valor_calculado:
+            disciplina[chave_alvo_atualizacao] = valor_calculado
+            modificou_conteudo = True
+    return modificou_conteudo
+
+
+def controlar_mudanca_notas_aluno():
+    file_path = path.students_absolute_path()
+    conteudo_arquivos= (data_validation.verificar_integridade_para_media_situacao()
+    )
+    if conteudo_arquivos is None:
+        return None
+    else:
+        lista_alunos, lista_disciplinas = conteudo_arquivos
+        # loop
+        # while True:
+        # aluno_buscado = students.verifica_dados_aluno_específico(lista_alunos)
+        # if aluno_buscado:
+        #     print(f"{aluno_buscado}")
+        try:
+            valor_atualizado = atualizar_valor_disciplina_especifica_aluno(
+                lista_alunos, "notas", coleta_notas
+            )
+        except KeyboardInterrupt:
+            print(
+                "Você escolheu interromper a atualização das notas. Finalizando o programa sem salvar dados."
+            )
+        else:
+            if valor_atualizado:
+                print("Valor atualizado")
+                print(lista_alunos)
+                #print(f"{aluno_buscado}")
+
+                # rodar o codigo do for para disciplina
+                # E seu eu usar essa função? o problema é o lop será que faço outra parecida com essa?
+
+
+#                 # atualizar_valor_das_disciplinas_aluno(
+#     lista_alunos, chave_alvo_atualizacao, funcao_calculo_atualizacao
+# )
+
+# else:
+#             # fazer uma função para quando a disciplina escolhida não tiver notas
+#             print(f"{aluno_existe['nome']}")
+#             nova_nota1 = float(
+#                 input(f"{disciplina_existe['nome']} nova nota 1: ")
+#             )
+#             nova_nota2 = float(
+#                 input(f"{disciplina_existe['nome']} nova nota 2: ")
+#             )
+#             mudar_notas(aluno_existe, codigo_existe, nova_nota1, nova_nota2)
+#             print(linha1)
+# print
+# coleta_notas()
