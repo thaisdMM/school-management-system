@@ -29,13 +29,6 @@ def verifica_matricula_existente(matricula: int, lista_alunos) -> bool:
     return False
 
 
-def buscar_aluno(lista_alunos, matricula):
-    for aluno in lista_alunos:
-        if aluno["matricula"] == matricula:
-            return aluno
-    return None
-
-
 def cadastro_alunos():
     file_path = path.students_absolute_path()
     dados_alunos = coleta_dados_alunos()
@@ -88,16 +81,144 @@ def buscar_disciplina_do_aluno(codigo_disciplina: int, aluno: dict):
     )
 
 
-def exibir_dados_alunos(lista_alunos, matricula):
-    aluno = buscar_aluno(lista_alunos, matricula)
-    if aluno == None:
-        print(
-            "Não há aluno com a matrícula pesquisada. Verifique a matrícula do aluno que quer exibir os dados."
-        )
+def buscar_aluno(lista_alunos, matricula):
+    for aluno in lista_alunos:
+        if aluno["matricula"] == matricula:
+            return aluno
+    return None
+
+
+# def controlar_exibicao_dados_aluno():
+#     lista_alunos = data_validation.verifica_integridade_arquivo_alunos()
+#     if lista_alunos is None:
+#         return None
+#     else:
+#         matricula_aluno = abs(
+#             project_interfaces.leia_int(
+#                 "Digite a matrícula do aluno que deseja ver os dados: "
+#             )
+#         )
+#         aluno_existe = buscar_aluno(lista_alunos, matricula_aluno)
+#         if aluno_existe is None:
+#             print(
+#                 "Não há aluno com a matrícula pesquisada. Verifique a matrícula do aluno que quer exibir os dados."
+#             )
+#             return False
+#         else:
+#             exibir_dados_aluno(aluno_existe)
+#             return True
+
+
+# def controlar_dados_aluno_específico():
+#     lista_alunos = data_validation.verifica_integridade_arquivo_alunos()
+#     if lista_alunos is None:
+#         return None
+#     else:
+#         # posso colocar uma msg específica aqui para usar tb em excluir aluno e ao invés de ser ver os dados colocar excluir os dados
+#         matricula_aluno = abs(
+#             project_interfaces.leia_int(
+#                 "Digite a matrícula do aluno que deseja ver os dados: "
+#             )
+#         )
+#         aluno_existe = buscar_aluno(lista_alunos, matricula_aluno)
+#         if aluno_existe is None:
+
+#             print(
+#                 "Não há aluno com a matrícula pesquisada. Verifique a matrícula do aluno que quer exibir os dados."
+#             )
+#             return False
+#         else:
+#             return aluno_existe
+
+
+# def verifica_dados_aluno_específico(lista_alunos, mgs=None):
+#     # VALIDAR DADOS EM OUTRO LUGAR
+#     # lista_alunos = data_validation.verifica_integridade_arquivo_alunos()
+#     if lista_alunos is None:
+#         return None
+#     else:
+#         # posso colocar uma msg específica aqui para usar tb em excluir aluno e ao invés de ser ver os dados colocar excluir os dados
+#         matricula_aluno = abs(project_interfaces.leia_int(mgs))
+#         aluno_existe = buscar_aluno(lista_alunos, matricula_aluno)
+#         if aluno_existe is None:
+
+#             print(
+#                 "Não há aluno com a matrícula pesquisada. Verifique a matrícula do aluno que quer exibir os dados."
+#             )
+#             return False
+#         else:
+#             return aluno_existe
+
+
+def exibir_dados_aluno(aluno: dict):
+    for key, value in aluno.items():
+        print(f"{key:<10} = {value}")
+
+
+def verifica_dados_aluno_específico(lista_alunos):
+    if lista_alunos is None:
+        return None
     else:
-        for key, value in aluno.items():
-            print(f"{key:<10} = {value}")
-    print("=-" * 50)
+        matricula_aluno = abs(
+            project_interfaces.leia_int("Digite a matrícula do aluno: ")
+        )
+        aluno_existe = buscar_aluno(lista_alunos, matricula_aluno)
+        if aluno_existe is None:
+            print(
+                "Não há aluno com a matrícula pesquisada. Verifique a matrícula do aluno que quer exibir os dados."
+            )
+            return False
+        else:
+            return aluno_existe
+
+
+def mostrar_dados_aluno_apos_validacao():
+    lista_alunos = data_validation.verifica_integridade_arquivo_alunos()
+    while True:
+        aluno_selecionado = verifica_dados_aluno_específico(lista_alunos)
+        if aluno_selecionado:
+            # resposta = input(
+            #     f"Deseja exibir dados do aluno {aluno_selecionado['nome']}? "
+            # ).strip().upper()
+            print(f"Dados do aluno(a): {aluno_selecionado['nome']}")
+            # continuar = project_interfaces.continuar()
+            # # if continuar:
+            # if resposta:
+            exibir_dados_aluno(aluno_selecionado)
+            print("Deseja continuar exibindo dados de algum aluno(a) especifico?")
+            continuar = project_interfaces.continuar()
+            if not continuar:
+                break
+            # else:
+            #     parar_loop = True
+            #     break
+        # else:
+        #     break
+        # if parar_loop:
+        #     break
+
+
+# def mostrar_dados_aluno_apos_validacao():
+#     lista_alunos = data_validation.verifica_integridade_arquivo_alunos()
+#     while resposta != "N":
+#         parar_loop = False
+#         msg = "Digite a matrícula do aluno que deseja ver os dados: "
+#         aluno_selecionado = verifica_dados_aluno_específico(lista_alunos, msg)
+#         if aluno_selecionado:
+#             resposta = input(
+#                 f"Deseja exibir dados do aluno {aluno_selecionado['nome']}? "
+#             )
+#             # continuar = project_interfaces.continuar()
+#             # if continuar:
+#             if resposta:
+#                 exibir_dados_aluno(aluno_selecionado)
+#             else:
+#                 parar_loop = True
+#                 break
+#         # else:
+#         #     break
+#         # if parar_loop:
+#         #     break
 
 
 def excluir_aluno(lista, aluno):
@@ -106,3 +227,21 @@ def excluir_aluno(lista, aluno):
     else:
         lista.remove(aluno)
         return True
+
+
+def controlar_exclusao_aluno_apos_validacao():
+    modificou_arquivo = None
+    aluno_selecionado = controlar_dados_aluno_específico()
+    if aluno_selecionado:
+        students_path = path.students_absolute_path()
+        lista_alunos = project_file.ler_arquivo(students_path)
+        resposta = input(f"Deja excluir o aluno {aluno_selecionado['nome']} ")
+        excluir_aluno(lista_alunos, aluno_selecionado)
+        modificou_arquivo = True
+    else:
+        modificou_arquivo = False
+        print("Nenhum aluno foi excluido!")
+        return False
+    if modificou_arquivo:
+        project_file.criar_subscrever_arquivo(students_path, lista_alunos)
+        print("Arquvo de alunos salvo após a exclusão de aluno.")
