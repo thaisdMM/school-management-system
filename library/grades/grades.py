@@ -184,7 +184,7 @@ def definir_media_situação_aluno():
 
 
 def modificar_dados_media_situacao():
-    conteudo = data_validation.verificar_integridade_para_media_situacao()
+    conteudo = data_validation.verificar_integridade_dados_para_operacoes_com_notas()
     if conteudo is None:
         return None
     else:
@@ -215,34 +215,6 @@ def exibir_situacao_aluno():
             )
 
 
-# def mudar_notas(aluno, disciplina_codigo, nova_nota1, nova_nota2):
-#     for disciplina in aluno["disciplina"]:
-#         if disciplina["codigo"] == disciplina_codigo:
-#             disciplina["notas"] = [nova_nota1, nova_nota2]
-#             disciplina["media"] = sum(disciplina["notas"]) / len(disciplina["notas"])
-#             situacao_aluno(aluno)
-#             return True
-#     return False
-
-
-# MUDAR NOTAS:
-# 1- verificar conteudo de arquivo de alunos e disciplina
-# 2- pedir matricula aluno verificar se o aluno existe
-# 3- pedir codigo de disciplina e verificar se existe para o aluno?
-# 4- ter uma lista salva em memoria e fazer um loop, só mudar o arquivo quando acabar o loop
-
-
-# def buscar_notas_por_disciplina(aluno: dict, disciplina_codigo: int):
-#     for disciplina in aluno["disciplina"]:
-#         if any(
-#             disciplina_existente["codigo"] == disciplina_codigo
-#             for disciplina_existente in aluno["disciplina"]
-#         ):
-#             return disciplina
-#         else:
-#             return False
-        
-
 def buscar_notas_por_disciplina(aluno: dict, disciplina_codigo: int):
     for disciplina in aluno["disciplina"]:
         if disciplina["codigo"] == disciplina_codigo:
@@ -254,16 +226,17 @@ def buscar_notas_por_disciplina(aluno: dict, disciplina_codigo: int):
 
 def controlar_mudanca_notas_aluno():
     file_path = path.students_absolute_path()
-    conteudo_arquivos = data_validation.verificar_integridade_para_media_situacao()
+    conteudo_arquivos = (
+        data_validation.verificar_integridade_dados_para_operacoes_com_notas()
+    )
     sair_cadastro = None
     if conteudo_arquivos is None:
         return None
-    if conteudo_arquivos is not None:
+    # if conteudo_arquivos is not None:
+    else:
         lista_alunos, lista_disciplinas = conteudo_arquivos
-        # loop
         modificou_dados = None
         while True:
-            # modificou_dados = None
             ficar_loop = project_interfaces.continuar()
             if not ficar_loop:
                 break
@@ -272,7 +245,6 @@ def controlar_mudanca_notas_aluno():
 
                 if not aluno_buscado:
                     continue
-                # fazer um elif para caso de o aluno buscado não term nenhuma disciplina associada, assim sequer tem notas para trocar
                 elif not aluno_buscado["disciplina"]:
                     print(
                         f"O aluno {aluno_buscado['nome']} não possui nenhuma disciplina cadastrada."
@@ -288,13 +260,6 @@ def controlar_mudanca_notas_aluno():
                             lista_disciplinas
                         )
                     )
-
-                    # Nunca entra nessa condição pois o a função acima só retorna uma disciplina que existe, está no loop
-                    # if not codigo_disciplina:
-                    #     #continue
-                    #     print("codigo não encontrado")
-                    # else:
-                    #     print(codigo_disciplina)
                     if codigo_disciplina:
 
                         disciplina_existe = buscar_notas_por_disciplina(
@@ -375,27 +340,3 @@ def controlar_mudanca_notas_aluno():
             print("Notas salvas no arquivo de cadastro de alunos.")
         else:
             print("Não foram adicionadas novas notas a nenhum aluno.")
-
-    # print(f"{aluno_buscado}")
-
-    # rodar o codigo do for para disciplina
-    # E seu eu usar essa função? o problema é o lop será que faço outra parecida com essa?
-
-
-#                 # atualizar_valor_das_disciplinas_aluno(
-#     lista_alunos, chave_alvo_atualizacao, funcao_calculo_atualizacao
-# )
-
-# else:
-#             # fazer uma função para quando a disciplina escolhida não tiver notas
-#             print(f"{aluno_existe['nome']}")
-#             nova_nota1 = float(
-#                 input(f"{disciplina_existe['nome']} nova nota 1: ")
-#             )
-#             nova_nota2 = float(
-#                 input(f"{disciplina_existe['nome']} nova nota 2: ")
-#             )
-#             mudar_notas(aluno_existe, codigo_existe, nova_nota1, nova_nota2)
-#             print(linha1)
-# print
-# coleta_notas()
