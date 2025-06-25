@@ -142,29 +142,38 @@ def controlar_exclusao_aluno_apos_validacao():
         return
     modificou_arquivo = False
     while True:
-        if not lista_alunos:
+        ficar_loop = project_interfaces.continuar()
+        if not ficar_loop:
             break
-        aluno_selecionado = verifica_dados_aluno_específico(lista_alunos)
-        if aluno_selecionado:
-            resposta = (
-                input(
-                    f"Deja excluir o aluno {aluno_selecionado['nome']}? S para excluir N para não excluir: "
-                )
-                .strip()
-                .upper()[0]
-            )
-            if resposta == "S":
-                excluir_aluno(lista_alunos, aluno_selecionado)
-                print(f"Aluno {aluno_selecionado['nome']} excluido com sucesso!")
-                print(project_interfaces.linha())
-                modificou_arquivo = True
-                continue
-            else:
-                continuar = project_interfaces.continuar()
-                if continuar:
-                    continue
-                else:
+        else:
+            if not lista_alunos:
+                break
+            aluno_selecionado = verifica_dados_aluno_específico(lista_alunos)
+            if aluno_selecionado:
+                # resposta = (
+                #     input(
+                #         f"Deja excluir o aluno {aluno_selecionado['nome']}? S para excluir N para não excluir: "
+                #     )
+                #     .strip()
+                #     .upper()[0]
+                # )
+                # if resposta == "S":
+                print(f"Excluir aluno(a): {aluno_selecionado['nome']}?")
+                resposta = project_interfaces.continuar()
+                if not resposta:
                     break
+                else:
+                    excluir_aluno(lista_alunos, aluno_selecionado)
+                    print(f"Aluno {aluno_selecionado['nome']} excluido com sucesso!")
+                    print(project_interfaces.linha())
+                    modificou_arquivo = True
+                    continue
+                # else:
+                #     continuar = project_interfaces.continuar()
+                #     if continuar:
+                #         continue
+                #     else:
+                #         break
     if not modificou_arquivo:
         print("Nenhum aluno foi excluido!")
         return False
