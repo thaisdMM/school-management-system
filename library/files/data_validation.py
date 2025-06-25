@@ -61,7 +61,7 @@ def verificar_integridade_arquivos_alunos_disciplinas():
         return conteudo_arquivo_alunos, conteudo_arquivo_disciplinas
 
 
-def verificar_integridade_para_media_situacao():
+def verificar_integridade_dados_para_operacoes_com_notas():
     conteudo_alunos, conteudo_disciplina = (
         verificar_integridade_arquivos_alunos_disciplinas()
     )
