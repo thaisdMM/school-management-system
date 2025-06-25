@@ -326,9 +326,14 @@ def controlar_mudanca_notas_aluno():
                                         )
                                         modificou_dados = True
                                         break
-
     if sair_cadastro:
         if salvar_dados:
+            atualizar_valor_das_disciplinas_aluno(lista_alunos, "media", media_notas)
+            atualizar_valor_das_disciplinas_aluno(
+                lista_alunos,
+                "situacao",
+                lambda disciplina: situacao_aluno(disciplina["media"]),
+            )
             project_file.criar_subscrever_arquivo(file_path, lista_alunos)
             print("Dados de cadastro de novas notas salvos até o momento.")
         else:
@@ -336,6 +341,12 @@ def controlar_mudanca_notas_aluno():
 
     else:
         if modificou_dados:
+            atualizar_valor_das_disciplinas_aluno(lista_alunos, "media", media_notas)
+            atualizar_valor_das_disciplinas_aluno(
+                lista_alunos,
+                "situacao",
+                lambda disciplina: situacao_aluno(disciplina["media"]),
+            )
             project_file.criar_subscrever_arquivo(file_path, lista_alunos)
             print("Notas salvas no arquivo de cadastro de alunos.")
         else:
