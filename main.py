@@ -62,10 +62,13 @@ while True:
         project_interfaces.titulo(
             f"{resposta}- Exibir a situação de um aluno específico."
         )
+        students.mostrar_dados_aluno_apos_validacao()
     elif resposta == 9:
         project_interfaces.titulo(f"{resposta}- Excluir aluno.")
+        students.controlar_exclusao_aluno_apos_validacao()
     elif resposta == 10:
         project_interfaces.titulo(f"{resposta}- Trocar notas do aluno.")
+        grades.controlar_mudanca_notas_aluno()
 
     elif resposta == 11:
         project_interfaces.titulo(f"{resposta}- Fim do programa.")
